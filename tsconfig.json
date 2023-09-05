@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "alwaysStrict": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "lib": [
+            "ES6",
+            "DOM",
+            "ESNext"
+        ],
+        "target": "ESNext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "pretty": true,
+        "skipLibCheck": true,
+        "strict": false,
+    },
+    "ts-node": {
+        "transpileOnly": true,
+        "esm": true,
+        "compilerOptions": {
+            "module": "NodeNext",
+            "esModuleInterop": true,
+            "moduleResolution": "NodeNext"
+        }
+    }
+}

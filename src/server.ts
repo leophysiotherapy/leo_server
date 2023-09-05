@@ -1,0 +1,91 @@
+import { ApolloServer } from '@apollo/server'
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
+import Nexus from 'nexus'
+import { createServer } from "node:http"
+import { join } from 'node:path'
+import { expressMiddleware } from '@apollo/server/express4';
+import { useServer } from 'graphql-ws/lib/use/ws'
+import express from 'express'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import dotenv from 'dotenv'
+import GraphQLUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
+import cookieParser from 'cookie-parser';
+import { WebSocketServer } from 'ws';
+
+const { makeSchema, fieldAuthorizePlugin, declarativeWrappingPlugin } = Nexus
+
+const { json } = bodyParser
+
+dotenv.config();
+
+
+import * as User from './api/schema/user/user.js'
+import * as Scalar from './api/schema/scalar/index.js'
+import * as FAQs from './api/schema/faqs/faqs.js'
+import * as Prescription from './api/schema/prescriptions/prescription.js'
+import * as Equipment from './api/schema/equipement/equipement.js'
+import * as Appointment from './api/schema/appointment/appointment.js'
+import * as Notifcation from './api/schema/notification/notification.js'
+
+(async function StartAppolloServe() {
+
+    const app = express()
+
+
+    const httpServer = createServer(app)
+
+
+    const schema = makeSchema({
+        types: [ User, Scalar, FAQs, Prescription, Equipment, Appointment, Notifcation ],
+        outputs: {
+            schema: join(process.cwd(), "/src/api/generated/schema.graphql"),
+            typegen: join(process.cwd(), "/src/api/generated/schema.ts")
+        },
+        plugins: [ fieldAuthorizePlugin(), declarativeWrappingPlugin() ],
+
+    })
+
+    app.use(cookieParser())
+    app.use(GraphQLUploadExpress())
+
+    const wsServer = new WebSocketServer({
+        path: "/graphql",
+        server: httpServer
+    })
+
+    const serverCleanup = useServer({ schema }, wsServer)
+
+    const server = new ApolloServer({
+        schema,
+        csrfPrevention: true,
+        cache: "bounded",
+        introspection: true,
+        plugins: [ ApolloServerPluginLandingPageLocalDefault(), ApolloServerPluginDrainHttpServer({ httpServer }), {
+            async serverWillStart() {
+                return {
+                    async drainServer() {
+                        serverCleanup.dispose()
+
+                    },
+                }
+            }
+        } ]
+    })
+
+    await server.start()
+
+
+    app.use("/graphql", cors<cors.CorsRequest>({
+        credentials: true,
+        origin: [ "https://studio.apollographql.com", "http://localhost:3000" ]
+    }), json(), expressMiddleware(server, {
+        context: async ({ req, res }) => ({ req, res })
+    }))
+
+    await new Promise(() => {
+        httpServer.listen({ port: process.env.PORT || 4000 })
+        console.log(`Server is running at port 4000 🚀 `)
+    })
+})()
