@@ -24,5 +24,20 @@ export const appointmentQuery = extendType({
                 })
             }
         })
+        t.list.field("getAllPatientAppointment", {
+            type: "appointment",
+            args: { userID: nonNull(idArg()) },
+            resolve: async (_, { userID }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        user: {
+                            some: {
+                                userID
+                            }
+                        }
+                    }
+                })
+            }
+        })
     },
 })

@@ -134,6 +134,12 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Mutation: {};
+  OTP: { // root type
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    expiredAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    otp?: string | null; // String
+    otpID?: string | null; // ID
+  }
   Query: {};
   appointment: { // root type
     appointmentID?: string | null; // ID
@@ -256,10 +262,18 @@ export interface NexusGenFieldTypes {
     updateAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     updateBlogDraft: NexusGenRootTypes['blog'] | null; // blog
     updateBlogsPost: NexusGenRootTypes['blog'] | null; // blog
+    updateContactNumber: NexusGenRootTypes['profile'] | null; // profile
     updateFAQs: NexusGenRootTypes['faqs'] | null; // faqs
     updateFeedback: NexusGenRootTypes['feedback'] | null; // feedback
+    updatePassword: NexusGenRootTypes['user'] | null; // user
     updateService: NexusGenRootTypes['service'] | null; // service
     updateUserVerifiedAcc: NexusGenRootTypes['user'] | null; // user
+  }
+  OTP: { // field return type
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    expiredAt: NexusGenScalars['DateTime'] | null; // DateTime
+    otp: string | null; // String
+    otpID: string | null; // ID
   }
   Query: { // field return type
     getAllAppointment: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
@@ -267,6 +281,7 @@ export interface NexusGenFieldTypes {
     getAllBlogsPost: Array<NexusGenRootTypes['blog'] | null> | null; // [blog]
     getAllEquipment: Array<NexusGenRootTypes['equipment'] | null> | null; // [equipment]
     getAllFAQs: Array<NexusGenRootTypes['faqs'] | null> | null; // [faqs]
+    getAllPatientAppointment: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getAllPhysioId: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPhysioPatient: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPhysioStaff: Array<NexusGenRootTypes['user'] | null> | null; // [user]
@@ -274,6 +289,7 @@ export interface NexusGenFieldTypes {
     getAllServcie: Array<NexusGenRootTypes['service'] | null> | null; // [service]
     getAllUser: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getBlogSearch: Array<NexusGenRootTypes['blog'] | null> | null; // [blog]
+    getServiceById: Array<NexusGenRootTypes['service'] | null> | null; // [service]
     getSortEquipment: Array<NexusGenRootTypes['equipment'] | null> | null; // [equipment]
   }
   appointment: { // field return type
@@ -398,10 +414,18 @@ export interface NexusGenFieldTypeNames {
     updateAppointment: 'appointment'
     updateBlogDraft: 'blog'
     updateBlogsPost: 'blog'
+    updateContactNumber: 'profile'
     updateFAQs: 'faqs'
     updateFeedback: 'feedback'
+    updatePassword: 'user'
     updateService: 'service'
     updateUserVerifiedAcc: 'user'
+  }
+  OTP: { // field return type name
+    createdAt: 'DateTime'
+    expiredAt: 'DateTime'
+    otp: 'String'
+    otpID: 'ID'
   }
   Query: { // field return type name
     getAllAppointment: 'appointment'
@@ -409,6 +433,7 @@ export interface NexusGenFieldTypeNames {
     getAllBlogsPost: 'blog'
     getAllEquipment: 'equipment'
     getAllFAQs: 'faqs'
+    getAllPatientAppointment: 'appointment'
     getAllPhysioId: 'user'
     getAllPhysioPatient: 'user'
     getAllPhysioStaff: 'user'
@@ -416,6 +441,7 @@ export interface NexusGenFieldTypeNames {
     getAllServcie: 'service'
     getAllUser: 'user'
     getBlogSearch: 'blog'
+    getServiceById: 'service'
     getSortEquipment: 'equipment'
   }
   appointment: { // field return type name
@@ -526,6 +552,7 @@ export interface NexusGenArgTypes {
     }
     createAppointment: { // args
       appointment?: NexusGenInputs['appointmentInput'] | null; // appointmentInput
+      end: string; // String!
       platform?: NexusGenEnums['platform'] | null; // platform
       serviceID: string; // ID!
       userID: string; // ID!
@@ -596,6 +623,10 @@ export interface NexusGenArgTypes {
       blog?: NexusGenInputs['blogInput'] | null; // blogInput
       blogsID: string; // ID!
     }
+    updateContactNumber: { // args
+      phone: NexusGenScalars['PhoneNumber']; // PhoneNumber!
+      userID: string; // ID!
+    }
     updateFAQs: { // args
       faqs: NexusGenInputs['faqsInput']; // faqsInput!
       faqsID: string; // ID!
@@ -603,6 +634,11 @@ export interface NexusGenArgTypes {
     updateFeedback: { // args
       feedback: string; // String!
       feedbackID: string; // ID!
+    }
+    updatePassword: { // args
+      current: string; // String!
+      newpass: string; // String!
+      userID: string; // ID!
     }
     updateService: { // args
       service?: NexusGenInputs['serviceInput'] | null; // serviceInput
@@ -616,11 +652,17 @@ export interface NexusGenArgTypes {
     getAllAppointmentID: { // args
       appointmentID: string; // ID!
     }
+    getAllPatientAppointment: { // args
+      userID: string; // ID!
+    }
     getAllPhysioId: { // args
       userID: string; // ID!
     }
     getBlogSearch: { // args
       search: string; // String!
+    }
+    getServiceById: { // args
+      serviceID: string; // ID!
     }
     getSortEquipment: { // args
       expireDate?: NexusGenEnums['sortType'] | null; // sortType

@@ -1,4 +1,4 @@
-import { enumType, extendType, idArg, inputObjectType, nonNull } from "nexus";
+import { enumType, extendType, idArg, inputObjectType, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
 import { SendEmail } from "../../../helpers/sendgrid.js";
 
@@ -25,7 +25,7 @@ export const appointmentMutation = extendType({
     definition(t) {
         t.field("createAppointment", {
             type: "appointment",
-            args: { appointment: "appointmentInput", serviceID: nonNull(idArg()), platform: "platform", userID: nonNull(idArg()) },
+            args: { appointment: "appointmentInput", serviceID: nonNull(idArg()), platform: "platform", userID: nonNull(idArg()), end: nonNull(stringArg()) },
             resolve: async (_, { serviceID, appointment: { date, time }, platform, userID }): Promise<any> => {
                 return await prisma.appointment.create({
                     data: {

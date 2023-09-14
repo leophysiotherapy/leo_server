@@ -19,7 +19,7 @@ scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/in
 
 type Mutation {
   createAdminAccount(role: roles, user: userInput): user
-  createAppointment(appointment: appointmentInput, platform: platform, serviceID: ID!, userID: ID!): appointment
+  createAppointment(appointment: appointmentInput, end: String!, platform: platform, serviceID: ID!, userID: ID!): appointment
   createBlogPost(blog: blogInput, userID: ID!): blog
   createEquipment(equipment: equipmentInput, userID: ID!): equipment
   createFAQs(faqs: faqsInput!, userID: ID!): faqs
@@ -38,10 +38,19 @@ type Mutation {
   updateAppointment(appointmentID: ID!, status: status): appointment
   updateBlogDraft(blogsID: ID!, draft: Boolean!): blog
   updateBlogsPost(blog: blogInput, blogsID: ID!): blog
+  updateContactNumber(phone: PhoneNumber!, userID: ID!): profile
   updateFAQs(faqs: faqsInput!, faqsID: ID!): faqs
   updateFeedback(feedback: String!, feedbackID: ID!): feedback
+  updatePassword(current: String!, newpass: String!, userID: ID!): user
   updateService(service: serviceInput, serviceID: ID!): service
   updateUserVerifiedAcc(email: EmailAddress!): user
+}
+
+type OTP {
+  createdAt: DateTime
+  expiredAt: DateTime
+  otp: String
+  otpID: ID
 }
 
 """
@@ -55,6 +64,7 @@ type Query {
   getAllBlogsPost: [blog]
   getAllEquipment: [equipment]
   getAllFAQs: [faqs]
+  getAllPatientAppointment(userID: ID!): [appointment]
   getAllPhysioId(userID: ID!): [user]
   getAllPhysioPatient: [user]
   getAllPhysioStaff: [user]
@@ -62,6 +72,7 @@ type Query {
   getAllServcie: [service]
   getAllUser: [user]
   getBlogSearch(search: String!): [blog]
+  getServiceById(serviceID: ID!): [service]
   getSortEquipment(expireDate: sortType, name: sortType, quantity: sortType): [equipment]
 }
 

@@ -48,6 +48,15 @@ model user {
   feedback     feedback[]
   appointment  appointment[]
   notification notification[]
+  otp          otp[]
+}
+
+model otp {
+  otpID     String   @id @default(cuid())
+  otp       String   @unique
+  expiredAt DateTime @db.Timestamp()
+  createdAt DateTime @db.Timestamp()
+  user      user[]
 }
 
 model notification {
@@ -76,6 +85,7 @@ model appointment {
   services      services[]
   platform      platform
   link          String?
+  amount        Int
   status        status     @default(upcoming)
   createdAt     DateTime   @default(now()) @db.Timestamp()
   updatedAt     DateTime   @default(now()) @db.Timestamp()
