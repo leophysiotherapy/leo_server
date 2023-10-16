@@ -1,4 +1,4 @@
-import { extendType, idArg, inputObjectType, nonNull } from "nexus"
+import { extendType, idArg, inputObjectType, nonNull, enumType } from "nexus"
 import { prisma } from "../../../util/index.js"
 
 
@@ -8,10 +8,16 @@ export const equipementInput = inputObjectType({
     definition(t) {
         t.string("name");
         t.string("description");
-        t.string("category");
         t.int("quantity");
         t.date("expireDate");
     },
+})
+
+
+
+export const equipementEnum = enumType({
+    name: "inventory",
+    members: [ "equipment", "supplies" ]
 })
 
 
@@ -20,11 +26,13 @@ export const EquipmentMutation = extendType({
     definition(t) {
         t.field("createEquipment", {
             type: "equipment",
-            args: { equipment: "equipmentInput", userID: nonNull(idArg()) },
-            resolve: async (_, { equipment: { name, description, category, quantity, expireDate }, userID }): Promise<any> => {
+            args: { equipment: "equipmentInput", userID: nonNull(idArg()), inventory: "inventory" },
+            resolve: async (_, { equipment: { name, description, quantity, expireDate }, userID, inventory }): Promise<any> => {
                 return await prisma.equipment.create({
                     data: {
-                        category, description, expireDate, name, quantity,
+                        description, expireDate, name, quantity,
+                        inventory,
+
                         user: {
                             connect: {
                                 userID
@@ -34,13 +42,13 @@ export const EquipmentMutation = extendType({
                 })
             }
         })
-        t.field("udpateEquipment", {
+        t.field("updateEquipment", {
             type: "equipment",
             args: { equipmentID: nonNull(idArg()), equipment: "equipmentInput" },
-            resolve: async (_, { equipmentID, equipment: { name, description, category, quantity, expireDate } }): Promise<any> => {
+            resolve: async (_, { equipmentID, equipment: { name, description, quantity, expireDate } }): Promise<any> => {
                 return await prisma.equipment.update({
                     data: {
-                        category, description, expireDate, name, quantity, updateAt: new Date(Date.now())
+                        description, expireDate, name, quantity, updateAt: new Date(Date.now())
                     },
                     where: {
                         equipmentID

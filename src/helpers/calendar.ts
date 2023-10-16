@@ -1,29 +1,30 @@
 import { google } from "googleapis"
 
 const auth = new google.auth.OAuth2({
-    clientId: process.env.GOOLE_ID,
-    clientSecret: process.env.GOOLE_SECRET,
+    clientId: process.env.GOOGLE_ID,
+    clientSecret: process.env.GOOLGE_SECRET,
 })
 
 
 
 auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN })
 
-const googleCalendar = async (start: string, end: string, email: string) => {
+const googleCalendar = async (date: string, time: string, end: string, email: string) => {
 
     const calendar = google.calendar({ version: 'v3', auth })
     try {
 
         return await calendar.events.insert({
+            calendarId: "primary",
             requestBody: {
-                summary: "Physio Theraphy Appointment",
 
+                summary: "Physio Theraphy Appointment",
                 start: {
-                    dateTime: new Date(start).toISOString(),
+                    dateTime: `${new Date(date).toISOString().slice(0, 10)}T${time}:00.000Z`,
                     timeZone: "Asia/Manila"
                 },
                 end: {
-                    dateTime: new Date(end).toISOString(),
+                    dateTime: `${new Date(date).toISOString().slice(0, 10)}T${end}:00.000Z`,
                     timeZone: "Asia/Manila"
                 },
                 recurrence: [

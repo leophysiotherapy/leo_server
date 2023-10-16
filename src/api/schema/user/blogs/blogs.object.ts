@@ -8,7 +8,8 @@ export const BlogObject = objectType({
         t.id("blogsID");
         t.string("title");
         t.string('content');
-        t.boolean("draft");
+        t.string("image");
+        t.string("expertise");
         t.datetime("createdAt");
         t.datetime("updatedAt");
         t.list.field("author", {

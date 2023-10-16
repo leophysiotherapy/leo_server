@@ -22,6 +22,33 @@ export const UserObject = objectType({
                 })
             }
         })
+        t.list.field("appointment", {
+            type: "appointment",
+            resolve: async ({ userID }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        user: {
+                            some: {
+                                userID
+                            }
+                        }
+                    },
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                })
+            }
+        })
+        t.list.field("diagnosis", {
+            type: "diagnosis",
+            resolve: async ({ userID }): Promise<any> => {
+                return await prisma.diagnosis.findMany({
+                    where: {
+                        userID
+                    }
+                })
+            }
+        })
         t.list.field('prescription', {
             type: "prescription",
             resolve: async ({ userID }): Promise<any> => {

@@ -7,10 +7,7 @@ export const prescriptionObject = objectType({
     name: "prescription",
     definition(t) {
         t.id("prescriptionID");
-        t.string("precription");
-        t.int("dose");
-        t.int("amount");
-        t.string("advice");
+        t.string("prescription");
         t.datetime("createdAt");
         t.datetime("updatedAt");
         t.list.field("patient", {

@@ -20,6 +20,7 @@ enum status {
   upcoming
   done
   finished
+  canceled
 }
 
 enum platform {
@@ -32,14 +33,19 @@ enum notifStatus {
   unread
 }
 
+enum inventory {
+  equipment
+  supplies
+}
+
 model user {
-  userID       String         @id @default(cuid())
-  email        String         @unique
+  userID       String        @id @default(cuid())
+  email        String        @unique
   password     String
   role         roles
-  verified     Boolean        @default(false)
-  creatdAt     DateTime       @default(now()) @db.Timestamp()
-  updateAt     DateTime       @default(now()) @db.Timestamp()
+  verified     Boolean       @default(false)
+  creatdAt     DateTime      @default(now()) @db.Timestamp()
+  updateAt     DateTime      @default(now()) @db.Timestamp()
   profile      profile?
   blog         blogs[]
   faqs         faqs[]
@@ -47,7 +53,7 @@ model user {
   prescription presciption[]
   feedback     feedback[]
   appointment  appointment[]
-  notification notification[]
+  diagnosis    diagnosis[]
   otp          otp[]
 }
 
@@ -59,48 +65,31 @@ model otp {
   user      user[]
 }
 
-model notification {
-  notificationID String      @id @default(cuid())
-  title          String
-  status         notifStatus
-  createdAt      DateTime    @default(now()) @db.Timestamp()
-  updatedAt      DateTime    @default(now()) @db.Timestamp()
-  user           user[]
-}
-
-model services {
-  serviceID   String        @id @default(cuid())
-  service     String
-  description String
-  price       Float
-  createdAt   DateTime      @default(now()) @db.Timestamp()
-  updatedAt   DateTime      @default(now()) @db.Timestamp()
-  appointment appointment[]
-}
-
 model appointment {
-  appointmentID String     @id @default(cuid())
-  date          DateTime   @db.Date
-  time          DateTime   @db.Time(6)
-  services      services[]
+  appointmentID String    @id @default(cuid())
+  date          DateTime  @db.Date
+  time          String
+  services      String?
   platform      platform
   link          String?
   amount        Int
-  status        status     @default(upcoming)
-  createdAt     DateTime   @default(now()) @db.Timestamp()
-  updatedAt     DateTime   @default(now()) @db.Timestamp()
+  status        status    @default(upcoming)
+  createdAt     DateTime  @default(now()) @db.Timestamp()
+  updatedAt     DateTime  @default(now()) @db.Timestamp()
   user          user[]
+  feedback      feedback? @relation(fields: [feedbackID], references: [feedbackID])
+  feedbackID    String?
 }
 
 model equipment {
-  equipmentID String   @id @default(cuid())
+  equipmentID String    @id @default(cuid())
   name        String
+  inventory   inventory
   description String
-  category    String
   quantity    Int
-  expireDate  DateTime @db.Date
-  creatdAt    DateTime @default(now()) @db.Timestamp()
-  updateAt    DateTime @default(now()) @db.Timestamp()
+  expireDate  DateTime  @db.Date
+  creatdAt    DateTime  @default(now()) @db.Timestamp()
+  updateAt    DateTime  @default(now()) @db.Timestamp()
   user        user[]
 }
 
@@ -108,9 +97,10 @@ model blogs {
   blogsID   String   @id @default(cuid())
   title     String
   content   String
+  expertise String
+  image     String
   createdAt DateTime @default(now()) @db.Timestamp()
   updatedAt DateTime @default(now()) @db.Timestamp()
-  draft     Boolean  @default(true)
   user      user[]
 }
 
@@ -145,30 +135,30 @@ model profile {
   userID         String? @unique
 }
 
+model diagnosis {
+  diagnosisID String   @id @default(cuid())
+  diagnosis   String   @default(cuid())
+  createdAt   DateTime @default(now()) @db.Timestamp()
+  updatedAt   DateTime @default(now()) @db.Timestamp()
+  user        user?    @relation(fields: [userID], references: [userID])
+  userID      String?
+}
+
 model presciption {
   prescriptionID String   @id @default(cuid())
   prescription   String
-  dose           Int
-  amount         Int
-  advice         String
   createdAt      DateTime @default(now()) @db.Timestamp()
   updatedAt      DateTime @default(now()) @db.Timestamp()
   patinet        user?    @relation(fields: [userID], references: [userID])
   userID         String?  @unique
 }
 
-model form {
-  formID   String   @id @default(cuid())
-  question String
-  answer   String
-  creatdAt DateTime @default(now()) @db.Timestamp()
-  updateAt DateTime @default(now()) @db.Timestamp()
-}
-
 model feedback {
-  feedbackID String   @id @default(cuid())
-  feedback   String
-  creatdAt   DateTime @default(now()) @db.Timestamp()
-  updatedAt  DateTime @default(now()) @db.Timestamp()
-  user       user[]
+  feedbackID  String        @id @default(cuid())
+  feedback    String
+  rating      Int
+  creatdAt    DateTime      @default(now()) @db.Timestamp()
+  updatedAt   DateTime      @default(now()) @db.Timestamp()
+  appointment appointment[]
+  user        user[]
 }

@@ -5,7 +5,7 @@ import { SendEmail } from "../../../../helpers/sendgrid.js";
 import { GraphQLError } from "graphql";
 
 export const OTPMutation = extendType({
-    type: "OTP",
+    type: "Mutation",
     definition(t) {
         t.field("createOTP", {
             type: "OTP",
@@ -38,93 +38,72 @@ export const OTPMutation = extendType({
 
 
                 SendEmail(email, `
+                <!DOCTYPE html>
                 <html lang="en">
+
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Document</title>
-                    <link href="/index.css" rel="stylesheet" />
-                    <style>
-                        body {
-                            width: 100%;
-                            height: 100vh;
-                            box-sizing: border-box;
-                            padding: 0;
-                            margin: 0;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                
-                        body div {
-                            height: 500px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            flex-direction: column;
-                            gap: 10px;
-                        }
-                
-                        body div h2 {
-                            width: 100%;
-                            height: auto;
-                            text-align: left;
-                        }
-                
-                        body div span {
-                            width: 100%;
-                            text-align: left;
-                            height: auto;
-                            font-size: 18px;
-                        }
-                
-                        body div .btn {
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            height: 70px;
-                        }
-                
-                        body div a {
-                            height: 50px;
-                            width: 150px;
-                            text-align: center;
-                            background-color: rgb(0, 162, 255);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            text-decoration: none;
-                            color: #fff;
-                        }
-                    </style>
                 </head>
-                
-                
-                <body>
-                    <div>
-                        <h2>Dear ${profile.profile.lastname},${profile.profile.firstname}</h2>
-                
-                        <span>
-                            Your One-Time Password (OTP) for secure access is: ${otps.otp}.
+
+
+                <body style="   width: 100%;
+                    height: 100vh;
+                    box-sizing: border-box;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;">
+                    <div style="           
+                    height: 500px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 10px;">
+
+                        <h2 style=" width: 100%;
+                        height: auto;
+                        text-align: left; font-size: 22px;">Dear ${profile.profile.lastname}, ${profile.profile.firstname}</h2>
+
+                        <span style=" width: 100%;
+                        text-align: left;
+                        height: auto;
+                        font-size: 18px;">
+                            Your One-Time Password (OTP) for secure access is: [OTP Code].
                         </span>
-                
-                        <span>
+
+                        <span style=" width: 100%;
+                        text-align: left;
+                        height: auto;
+                        font-size: 17px;">
                             Please do not share this OTP with anyone, as it is valid for a single use only.
                         </span>
-                        <span>
+                        <span style=" width: 100%;
+                        text-align: left;
+                        height: auto;
+                        font-size: 17px;">
                             If you did not request this OTP, please ignore this message.
                         </span>
                         <br />
-                        <span>
+                        <span style=" width: 100%;
+                        text-align: left;
+                        height: auto;
+                        font-size: 17px;">
                             Thank you,
                         </span>
                         <br />
-                        <span>Restore Rehabilitation Group</span>
+                        <span style=" width: 100%;
+                        text-align: left;
+                        height: auto;
+                        font-size: 17px;">Restore Rehabilitation Group</span>
                     </div>
                 </body>
-                
-                </html>`)
+
+                </html>
+             `)
 
                 return otps
             }

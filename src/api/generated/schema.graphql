@@ -3,6 +3,11 @@
 
 
 """
+The `BigInt` scalar type represents non-fractional signed whole numeric values.
+"""
+scalar BigInt
+
+"""
 A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar Date
@@ -17,33 +22,50 @@ A field whose value conforms to the standard internet email address format as sp
 """
 scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
+type EquipmentExpiration {
+  count: Int
+}
+
 type Mutation {
-  createAdminAccount(role: roles, user: userInput): user
-  createAppointment(appointment: appointmentInput, end: String!, platform: platform, serviceID: ID!, userID: ID!): appointment
+  canceledAppointment(appointmentID: ID!): appointment
+  createAdminAccount(user: userInput): user
+  createAppointment(appointment: appointmentInput, end: String!, platform: platform, userID: ID!): appointment
   createBlogPost(blog: blogInput, userID: ID!): blog
-  createEquipment(equipment: equipmentInput, userID: ID!): equipment
+  createEquipment(equipment: equipmentInput, inventory: inventory, userID: ID!): equipment
   createFAQs(faqs: faqsInput!, userID: ID!): faqs
-  createMyFeedback(feedback: String!, userID: ID!): feedback
+  createMyFeedback(appointmentID: ID!, feedback: String!, rating: Int!, userID: ID!): feedback
+  createOTP(email: EmailAddress!): OTP
+  createOldPatient(diagnosis: String!, prescription: String!, user: userInput): user
   createPatientAccount(user: userInput): user
+  createPatientDiagnosis(diagnosis: ID!, userID: ID!): diagnosis
+  createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
   createProfileAvatar(avatar: String!, profileID: ID!): avatar
-  createService(service: serviceInput): service
+  createStaffAccount(file: Upload, user: userInput): user
   deleteAppointment(appointmentID: ID!): appointment
   deleteBlogPost(blogsID: ID!): blog
   deleteEquipment(equipmentID: ID!): equipment
   deleteFAQs(faqsID: ID!): faqs
+  deleteMyFeedback(feedbackID: ID!): feedback
+  deletePatientDiagnosis(diagnosisID: ID!): diagnosis
+  deletePrescrpition(prescriptionID: ID!): prescription
   deleteUserAcc(userID: ID!): user
+  findEmailAddress(email: EmailAddress!): user
   login(email: ID!, password: String!): token
-  resetUserPassword(password: String!, retype: String!, userID: ID!): user
-  udpateEquipment(equipment: equipmentInput, equipmentID: ID!): equipment
+  resetUserPassword(email: EmailAddress!, password: String!, retype: String!): user
   updateAppointment(appointmentID: ID!, status: status): appointment
-  updateBlogDraft(blogsID: ID!, draft: Boolean!): blog
+  updateAppointmentSession(appointment: appointmentInput, appointmentID: ID!, link: String, platform: platform, status: status): appointment
   updateBlogsPost(blog: blogInput, blogsID: ID!): blog
   updateContactNumber(phone: PhoneNumber!, userID: ID!): profile
+  updateEquipment(equipment: equipmentInput, equipmentID: ID!): equipment
   updateFAQs(faqs: faqsInput!, faqsID: ID!): faqs
-  updateFeedback(feedback: String!, feedbackID: ID!): feedback
+  updateOlPatient(diagnosis: String!, prescription: String!, user: userInput, userID: ID!): user
   updatePassword(current: String!, newpass: String!, userID: ID!): user
-  updateService(service: serviceInput, serviceID: ID!): service
+  updatePatientAccount(firstname: ID!, lastname: String!, phone: PhoneNumber!, userID: ID!): user
+  updatePatientDiagnosis(diagnosis: String!, diagnosisID: ID!): diagnosis
+  updatePrescription(prescription: prescriptionInput, prescriptionID: ID!): prescription
+  updateStaffAccount(user: userInput, userID: ID!): user
   updateUserVerifiedAcc(email: EmailAddress!): user
+  verifyOTP(otp: String!): OTP
 }
 
 type OTP {
@@ -62,18 +84,37 @@ type Query {
   getAllAppointment: [appointment]
   getAllAppointmentID(appointmentID: ID!): [appointment]
   getAllBlogsPost: [blog]
-  getAllEquipment: [equipment]
+  getAllDiagnosis: [diagnosis]
+  getAllEquipment(inventories: inventory): [equipment]
   getAllFAQs: [faqs]
-  getAllPatientAppointment(userID: ID!): [appointment]
+  getAllFeedback: [feedback]
+  getAllFeedbackByUserId(userID: ID!): [feedback]
+  getAllPatientAppointment(platform: platform, status: status, userID: ID!): [appointment]
   getAllPhysioId(userID: ID!): [user]
   getAllPhysioPatient: [user]
-  getAllPhysioStaff: [user]
+  getAllPhysioUserBySearch(role: roles, search: String!): [user]
   getAllPrescription: [prescription]
-  getAllServcie: [service]
   getAllUser: [user]
+  getAppointmentByDateTime(date: String!, platform: platform): [appointment]
+  getAppointmentByPlatform(platform: platform): [appointment]
+  getAppointmentByplatform(platform: platform): [appointment]
   getBlogSearch(search: String!): [blog]
-  getServiceById(serviceID: ID!): [service]
-  getSortEquipment(expireDate: sortType, name: sortType, quantity: sortType): [equipment]
+  getDiagnosisID(diagnosisID: ID!): [diagnosis]
+  getFeedbackById(feedbackID: ID!): [feedback]
+  getFindFAQsQuestion(search: String!): [faqs]
+  getFindPrescription(search: String!): [prescription]
+  getInventoryBySearch(search: String!): [equipment]
+  getInventoryExpiration: Int
+  getPhysioUserByRole(limit: Int!, role: roles, take: Int!): [user]
+  getPrescriptionsById(prescriptionID: ID!): [prescription]
+  getReportsByPlatform(platform: platform): [appointment]
+  getSearchuserByRole(role: roles, search: String!): [user]
+}
+
+type Subscription {
+  FAQsSubscriptions: faqs
+  InventorySubscriptions(inventory: inventory): equipment
+  UserSubscriptions(role: roles): user
 }
 
 """
@@ -86,20 +127,26 @@ A field whose value conforms to the standard URL format as specified in RFC3986:
 """
 scalar URL
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 type appointment {
+  amount: Int
   appointmentID: ID
   date: Date
   link: String
   patients: [user]
   platform: String
-  services: [service]
+  services: String
   status: String
-  time: Time
+  time: String
 }
 
 input appointmentInput {
+  amount: Int
   date: Date
-  time: Time
+  services: String
+  time: String
 }
 
 type avatar {
@@ -114,27 +161,35 @@ type blog {
   blogsID: ID
   content: String
   createdAt: DateTime
-  draft: Boolean
+  expertise: String
+  image: String
   title: String
   updatedAt: DateTime
 }
 
 input blogInput {
   content: String
+  expertise: String
+  file: Upload
   title: String
 }
 
+type diagnosis {
+  createdAt: DateTime
+  diagnosis: String
+  diagnosisID: ID
+  patient: [user]
+}
+
 type equipment {
-  category: String
   description: String
   equipmentID: ID
-  expiredDate: DateTime
+  expireDate: DateTime
   name: String
   quantity: Int
 }
 
 input equipmentInput {
-  category: String
   description: String
   expireDate: Date
   name: String
@@ -155,18 +210,18 @@ input faqsInput {
 }
 
 type feedback {
+  appointment: [appointment]
+  creatdAt: DateTime
   createdAt: DateTime
   feedback: String
   feedbackID: ID
-  users(feedbackID: ID!): [user]
+  rating: Int
+  users: [user]
 }
 
-type notification {
-  createdAt: DateTime
-  notificationID: ID
-  status: String
-  title: String
-  updatedAt: DateTime
+enum inventory {
+  equipment
+  supplies
 }
 
 enum platform {
@@ -175,23 +230,14 @@ enum platform {
 }
 
 type prescription {
-  advice: String
-  amount: Int
-  createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
   createdAt: DateTime
-  deletePrescrpition(prescriptionID: ID!): prescription
-  dose: Int
   patient: [user]
-  precription: String
+  prescription: String
   prescriptionID: ID
-  updatePrescription(prescription: prescriptionInput, prescriptionID: ID!): prescription
   updatedAt: DateTime
 }
 
 input prescriptionInput {
-  advice: String
-  amount: Int
-  dose: Int
   prescription: String
 }
 
@@ -201,6 +247,7 @@ type profile {
   emergencyPhone: PhoneNumber
   expertise: String
   firstname: String
+  fullname: String
   lastname: String
   phone: PhoneNumber
   profileID: ID
@@ -212,27 +259,8 @@ enum roles {
   staff
 }
 
-type service {
-  createdAt: DateTime
-  description: String
-  price: Float
-  service: String
-  serviceID: ID
-  updatedAt: DateTime
-}
-
-input serviceInput {
-  description: String
-  price: Float
-  service: String
-}
-
-enum sortType {
-  asc
-  desc
-}
-
 enum status {
+  canceled
   done
   finished
   upcoming
@@ -243,7 +271,9 @@ type token {
 }
 
 type user {
+  appointment: [appointment]
   createdAt: DateTime
+  diagnosis: [diagnosis]
   email: EmailAddress
   password: String
   prescription: [prescription]

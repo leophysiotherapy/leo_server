@@ -6,22 +6,20 @@ export const presciptionInput = inputObjectType({
     name: "prescriptionInput",
     definition(t) {
         t.string("prescription");
-        t.int("dose");
-        t.int("amount");
-        t.string("advice");
+
     },
 })
 
 export const presciptionMutation = extendType({
-    type: "prescription",
+    type: "Mutation",
     definition(t) {
         t.field("createPatientPrescription", {
             type: "prescription",
             args: { prescription: nonNull("prescriptionInput"), userID: nonNull(idArg()) },
-            resolve: async (_, { prescription: { advice, amount, dose, prescription }, userID }): Promise<any> => {
+            resolve: async (_, { prescription: { prescription }, userID }): Promise<any> => {
                 return await prisma.presciption.create({
                     data: {
-                        advice, amount, dose, prescription,
+                        prescription,
                         patinet: {
                             connect: {
                                 userID
@@ -45,9 +43,9 @@ export const presciptionMutation = extendType({
         t.field("updatePrescription", {
             type: "prescription",
             args: { prescriptionID: nonNull(idArg()), prescription: "prescriptionInput" },
-            resolve: async (_, { prescription: { advice, amount, dose, prescription }, prescriptionID }): Promise<any> => {
+            resolve: async (_, { prescription: { prescription }, prescriptionID }): Promise<any> => {
                 return await prisma.presciption.update({
-                    where: { prescriptionID }, data: { advice, amount, dose, prescription, updatedAt: new Date(Date.now()) }
+                    where: { prescriptionID }, data: { prescription, updatedAt: new Date(Date.now()) }
                 })
             }
         })

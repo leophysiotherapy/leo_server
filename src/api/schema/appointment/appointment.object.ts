@@ -7,24 +7,12 @@ export const appointmentObject = objectType({
     definition(t) {
         t.id("appointmentID");
         t.date("date");
-        t.time("time");
+        t.string("time");
         t.string("platform");
         t.string("link");
         t.string("status");
-        t.list.field("services", {
-            type: "service",
-            resolve: async ({ appointmentID }): Promise<any> => {
-                return await prisma.services.findMany({
-                    where: {
-                        appointment: {
-                            some: {
-                                appointmentID
-                            }
-                        }
-                    }
-                })
-            }
-        })
+        t.int("amount");
+        t.string('services')
         t.list.field("patients", {
             type: "user",
             resolve: async ({ appointmentID }): Promise<any> => {

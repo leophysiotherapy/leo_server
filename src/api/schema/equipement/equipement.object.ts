@@ -8,8 +8,15 @@ export const EquipmentObject = objectType({
         t.id("equipmentID");
         t.string("name");
         t.string("description");
-        t.string("category");
         t.int("quantity");
-        t.datetime("expiredDate");
+        t.datetime("expireDate");
+    },
+})
+
+
+export const equipemntExpiration = objectType({
+    name: "EquipmentExpiration",
+    definition(t) {
+        t.int("count");
     },
 })

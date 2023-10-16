@@ -1,8 +1,8 @@
-import { S3Client } from '@aws-sdk/client-s3'
-import { Upload } from '@aws-sdk/lib-storage'
+import { Upload } from '@aws-sdk/lib-storage';
+import { S3 } from '@aws-sdk/client-s3'
 
 
-const client = new S3Client({
+const client = new S3({
     region: process.env.REGION,
     credentials: {
         accessKeyId: process.env.ACCESSKEY as any,
@@ -10,25 +10,31 @@ const client = new S3Client({
     }
 });
 
-export const ImageUpload = async (filename: any, body: any) => {
 
-    const params = {
-        Bucket: process.env.BUCKET,
-        Key: filename,
-        Body: body
-    }
+export const ImageUpload = async (filename: string, body: any): Promise<any> => {
+
+
+    let result;
+
 
 
     const UploadLibStorage = new Upload({
         client,
-        params
+        params: {
+            Bucket: process.env.BUCKET,
+            Key: filename,
+            Body: body(),
+            ACL: "public-read",
+
+        }
     })
 
     UploadLibStorage.on("httpUploadProgress", (data) => {
-        return data.Key
+        result = `https://ustproject.s3.ap-southeast-1.amazonaws.com/${data.Key}`
     })
 
 
     await UploadLibStorage.done()
 
+    return result
 }

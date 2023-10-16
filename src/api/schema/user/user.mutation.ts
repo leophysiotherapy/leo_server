@@ -1,9 +1,10 @@
 import { enumType, extendType, idArg, inputObjectType, nonNull, stringArg } from "nexus";
-import { prisma } from "../../../util/index.js";
+import { prisma, pubsub } from "../../../util/index.js";
 import { GraphQLError } from 'graphql'
 import bcryptjs from 'bcryptjs'
 import jsonwebtoken from "jsonwebtoken";
 import { SendEmail } from "../../../helpers/sendgrid.js";
+import { ImageUpload } from "../../../helpers/aws.js";
 
 
 const { sign } = jsonwebtoken
@@ -33,13 +34,13 @@ export const UserMutation = extendType({
     definition(t) {
         t.field('createAdminAccount', {
             type: "user",
-            args: { user: "userInput", role: "roles" },
-            resolve: async (_, { user: { email, firstname, lastname, phone, password, designation, emergencyPhone, expertise }, role }): Promise<any> => {
+            args: { user: "userInput" },
+            resolve: async (_, { user: { email, firstname, lastname, phone, password, designation, emergencyPhone, expertise } }): Promise<any> => {
                 const pass = await bcryptjs.hash(password, 12);
                 return await prisma.user.create({
                     data: {
                         email, password: pass,
-                        role,
+                        role: "admin",
                         verified: true,
                         profile: {
                             create: {
@@ -56,6 +57,43 @@ export const UserMutation = extendType({
                 })
             }
         })
+        t.field("createStaffAccount", {
+            type: "user",
+            args: { user: "userInput", file: "Upload" },
+            resolve: async (_, { user: { email, firstname, lastname, phone, designation, emergencyPhone, expertise }, file }): Promise<any> => {
+
+                const { createReadStream, filename } = await file;
+                const pass = await bcryptjs.hash("0000", 12);
+                const users = await prisma.user.create({
+                    data: {
+                        email, password: pass,
+                        role: "staff",
+                        verified: true,
+                        profile: {
+                            create: {
+                                firstname,
+                                lastname,
+                                phone,
+                                designation,
+                                expertise,
+                                emergencyPhone,
+                                avatar: {
+                                    create: {
+                                        avatar: await ImageUpload(filename, createReadStream)
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                })
+
+                pubsub.publish("createUserAccount", users)
+
+                return users
+            }
+
+        })
         t.field("createPatientAccount", {
             type: "user",
             args: { user: "userInput" },
@@ -68,90 +106,52 @@ export const UserMutation = extendType({
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <link href="/index.css" rel="stylesheet" />
-                    <title>Document</title>
-                    <style>
-                    body {
-                        width: 100%;
-                        height: 100vh;
-                        box-sizing: border-box;
-                        padding: 0;
-                        margin: 0;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-            
-                    body div {
-                        height: 500px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-direction: column;
-                        gap: 10px;
-                    }
-            
-                    body div h2 {
-                        width: 100%;
-                        height: auto;
-                        text-align: left;
-                    }
-            
-                    body div span {
-                        width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 18px;
-                    }
-            
-                    body div .btn {
-                        width: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        height: 70px;
-                    }
-            
-                    body div a {
-                        height: 50px;
-                        width: 150px;
-                        text-align: center;
-                        background-color: rgb(0, 162, 255);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        text-decoration: none;
-                        color: #fff;
-                    }
-                    </style>
-                    <div>
-                        <h2> Hello ${lastname}, ${firstname}</h2>
-                        <br />
-                        <br />
-                        <span> Welcome to the Restore Rehabilitation Group!</span>
-                        <br>
-                        <br />
-                        <span>
-                            Before accessing your account, you must verify your email by
-                            clicking
-                            the button or link.
-                        </span>
-                        <br />
-                        <span>
-                            By activating your account, you can access the features that are necessary to continue on
-                            the
-                            website.
-                        </span>
-                        <br /> <br />
-                        <span>Thank you,</span>
-                        <div class="btn">
                 
-                            <a href="http://localhost:3000/verify/confirmed">Click this</a>
-                        </div>
-                        <br />
-                        <br /> <br />
-                        <span>Restore Rehabilitation Group</span>
-                    </div>
-                </body>
+                    <title>Account Verification</title>
+                
+                    <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                        <table style="width: 500px; border: 1px solid #ccc">
+                            <tr style="height: 60px;">
+                                <td style="font-family: Poppins;"> Hello ${lastname}, ${firstname}</h2>
+                                </td>
+                            </tr>
+                            <tr style="height: 60px;">
+                                <td style="font-family: Poppins;"> Welcome to the Restore Rehabilitation Group!</td>
+                            </tr>
+                            <tr style=" height: 60px;">
+                                <td style="font-family: Poppins;">
+                                    Before accessing your account, you must verify your email by
+                                    clicking
+                                    the button or link.
+                                </td>
+                            </tr>
+                            <tr style=" height: 60px;">
+                                <td sstyle="font-family: Poppins;">
+                                    By activating your account, you can access the features that are necessary to continue on
+                                    the
+                                    website.
+                                </td>
+                            </tr>
+                            <tr style="height: 60px;">
+                                <td style="font-family: Poppins;">
+                                    Thank you
+                                </td>
+                            </tr>
+                    
+                            <tr style=" height: 60px;">
+                                <td style=" width: 100%; font-family: Poppins; text-align: center;">
+                    
+                                    <a style="text-align: center; background-color: rgb(0, 162, 255); text-align: center; text-decoration: none; color: #fff;  padding: 10px 20px;"
+                                        href="http://localhost:3000/verify/confirmed">Click this</a>
+                                </td>
+                            </tr>
+                            <tr style="height: 60px;">
+                    
+                                <td style="font-family: Poppins;">Restore Rehabilitation
+                                    Group</td>
+                            </tr>
+                        </table>
+                    </body>
                 
                 </html>`)
 
@@ -166,12 +166,148 @@ export const UserMutation = extendType({
                                 lastname,
                                 phone,
                             }
+                        },
+                        prescription: {
+                            create: {
+                                prescription: ""
+                            }
+                        },
+                        diagnosis: {
+                            create: {
+                                diagnosis: ""
+                            }
                         }
-
                     }
                 })
 
 
+            }
+        })
+        t.field("updateStaffAccount", {
+            type: "user",
+            args: { userID: nonNull(idArg()), user: "userInput" },
+            resolve: async (_, { userID, user: { firstname, lastname, phone, designation, expertise, emergencyPhone } }): Promise<any> => {
+                return await prisma.user.update({
+                    where: { userID },
+                    data: {
+
+                        profile: {
+                            update: {
+                                expertise,
+                                emergencyPhone, designation,
+                                firstname,
+                                lastname,
+                                phone,
+                            }
+                        },
+                    }
+                })
+            }
+        })
+        t.field("createOldPatient", {
+            type: "user",
+            args: { user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()) },
+            resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, prescription }): Promise<any> => {
+                return await prisma.user.create({
+                    data: {
+                        email,
+                        password: await bcryptjs.hash("0000", 12),
+                        role: "patient",
+                        profile: {
+                            create: {
+                                firstname, lastname, phone
+                            }
+                        },
+                        diagnosis: {
+                            create: {
+                                diagnosis
+                            }
+                        },
+                        prescription: {
+                            create: {
+                                prescription
+                            }
+                        }
+                    }
+                })
+            }
+        })
+        t.field("updateOlPatient", {
+            type: "user",
+            args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()) },
+            resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis, prescription }): Promise<any> => {
+
+                const userPrescriptions = await prisma.presciption.findMany({
+                    where: {
+                        userID
+                    }
+                })
+
+                const userDiagnosis = await prisma.diagnosis.findMany({
+                    where: {
+                        userID
+                    }
+                })
+                return await prisma.user.update({
+                    data: {
+                        email,
+                        profile: {
+                            update: {
+                                firstname, lastname, phone,
+                            }
+
+                        },
+                        prescription: {
+                            upsert: {
+                                create: {
+                                    prescription
+                                },
+                                update: {
+                                    prescription
+                                },
+                                where: {
+                                    prescriptionID: userPrescriptions[ 0 ].prescriptionID
+                                }
+                            }
+                        },
+                        diagnosis: {
+                            upsert: {
+                                create: {
+                                    diagnosis
+                                },
+                                update: {
+                                    diagnosis
+                                },
+                                where: {
+                                    diagnosisID: userDiagnosis[ 0 ].diagnosisID
+                                }
+                            }
+                        }
+                    },
+                    where: {
+                        userID
+                    }
+                })
+            }
+        })
+
+
+        t.field("updatePatientAccount", {
+            type: "user",
+            args: { userID: nonNull(idArg()), firstname: nonNull(idArg()), lastname: nonNull(stringArg()), phone: nonNull("PhoneNumber") },
+            resolve: async (_, { userID, firstname, lastname, phone }): Promise<any> => {
+                return await prisma.user.update({
+                    where: { userID },
+                    data: {
+                        profile: {
+                            update: {
+                                firstname,
+                                lastname,
+                                phone,
+                            }
+                        },
+                    }
+                })
             }
         })
         t.field("updateUserVerifiedAcc", {
@@ -199,8 +335,8 @@ export const UserMutation = extendType({
         })
         t.field("resetUserPassword", {
             type: "user",
-            args: { userID: nonNull(idArg()), password: nonNull(stringArg()), retype: nonNull(stringArg()) },
-            resolve: async (_, { userID, password, retype }): Promise<any> => {
+            args: { email: nonNull("EmailAddress"), password: nonNull(stringArg()), retype: nonNull(stringArg()) },
+            resolve: async (_, { email, password, retype }): Promise<any> => {
 
 
                 if (password !== retype) throw new GraphQLError("Password is not matched");
@@ -209,7 +345,7 @@ export const UserMutation = extendType({
 
                 return await prisma.user.update({
                     data: { password: pass },
-                    where: { userID }
+                    where: { email }
                 })
             }
         })
@@ -270,6 +406,23 @@ export const UserMutation = extendType({
 
                 return { token }
 
+            }
+        })
+        t.field("findEmailAddress", {
+            type: "user",
+            args: { email: nonNull("EmailAddress") },
+            resolve: async (_, { email }): Promise<any> => {
+
+                if (email.length === 0 || email === null) throw new GraphQLError("Field should not be empty")
+
+                const emails = await prisma.user.findUnique({
+                    where: {
+                        email
+                    }
+                })
+
+                if (!emails) throw new GraphQLError("Email address not found")
+                return emails
             }
         })
     },

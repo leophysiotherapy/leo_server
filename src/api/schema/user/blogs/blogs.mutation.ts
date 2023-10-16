@@ -1,5 +1,6 @@
 import { booleanArg, extendType, idArg, inputObjectType, nonNull } from "nexus";
 import { prisma } from "../../../../util/index.js";
+import { ImageUpload } from "../../../../helpers/aws.js";
 
 
 export const blogInput = inputObjectType({
@@ -7,7 +8,8 @@ export const blogInput = inputObjectType({
     definition(t) {
         t.string("title");
         t.string("content");
-
+        t.string("expertise");
+        t.upload("file");
     },
 })
 export const BlogMutation = extendType({
@@ -16,10 +18,17 @@ export const BlogMutation = extendType({
         t.field("createBlogPost", {
             type: "blog",
             args: { blog: "blogInput", userID: nonNull(idArg()) },
-            resolve: async (_, { blog: { title, content }, userID }): Promise<any> => {
+            resolve: async (_, { blog: { title, content, file, expertise }, userID }): Promise<any> => {
+
+                const { createReadStream, filename } = await file;
+
+
                 return await prisma.blogs.create({
                     data: {
-                        title, content, user: {
+                        title, content,
+                        image: `${await ImageUpload(filename, createReadStream)}`,
+                        expertise,
+                        user: {
                             connect: {
                                 userID
                             }
@@ -28,23 +37,13 @@ export const BlogMutation = extendType({
                 })
             }
         })
-        t.field("updateBlogDraft", {
-            type: "blog",
-            args: { blogsID: nonNull(idArg()), draft: nonNull(booleanArg()) },
-            resolve: async (_, { blogsID, draft }): Promise<any> => {
-                return await prisma.blogs.update({
-                    where: { blogsID },
-                    data: { draft }
-                })
-            }
-        })
         t.field("updateBlogsPost", {
             type: "blog",
             args: { blogsID: nonNull(idArg()), blog: "blogInput" },
-            resolve: async (_, { blogsID, blog: { title, content } }): Promise<any> => {
+            resolve: async (_, { blogsID, blog: { title, content, expertise} }): Promise<any> => {
                 return await prisma.blogs.update({
                     data: {
-                        title, content,
+                        title, content, expertise,
                         updatedAt: new Date(Date.now())
                     },
                     where: {

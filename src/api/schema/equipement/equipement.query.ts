@@ -1,49 +1,45 @@
-import { enumType, extendType, nonNull } from "nexus";
+import { enumType, extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
-
-export const sortEq = enumType({
-    name: "sortType",
-    members: [ "asc", "desc" ]
-})
 
 export const EquipmentQuery = extendType({
     type: "Query",
     definition(t) {
         t.list.field("getAllEquipment", {
             type: "equipment",
-            resolve: async (): Promise<any> => {
-                return await prisma.equipment.findMany()
+            args: { inventories: "inventory" },
+            resolve: async (_, { inventories }): Promise<any> => {
+                return await prisma.equipment.findMany({
+                    where: {
+                        inventory: inventories
+                    },
+                    orderBy: {
+                        expireDate: "asc"
+                    }
+                })
             }
         })
-        t.list.field("getSortEquipment", {
+        t.int("getInventoryExpiration", {
+            resolve: async (): Promise<any> => {
+                const inv = await prisma.$queryRawUnsafe(`SELECT COUNT(*)
+                FROM public.equipment
+                WHERE "expireDate" > CURRENT_DATE
+                AND  "expireDate" <= CURRENT_DATE + INTERVAL '7 DAY'`)
+
+                return parseInt(inv[ 0 ].count)
+            }
+        })
+        t.list.field("getInventoryBySearch", {
             type: "equipment",
-            args: { name: "sortType", quantity: "sortType", expireDate: "sortType" },
-            resolve: async (_, { name, quantity, expireDate }): Promise<any> => {
-                if (name) {
-                    const names = await prisma.equipment.findMany({
-                        orderBy: {
-                            name
+            args: { search: nonNull(stringArg()) },
+            resolve: async (_, { search }): Promise<any> => {
+                return await prisma.equipment.findMany({
+                    where: {
+                        name: {
+                            contains: search,
+                            mode: "insensitive"
                         }
-                    })
-                    return names
-                }
-                else if (quantity) {
-                    const quantities = await prisma.equipment.findMany({
-                        orderBy: {
-                            quantity
-                        }
-                    })
-
-                    return quantities
-                } else {
-                    const expiredDates = await prisma.equipment.findMany({
-                        orderBy: {
-                            expireDate
-                        }
-                    })
-
-                    return expiredDates
-                }
+                    }
+                })
             }
         })
     }

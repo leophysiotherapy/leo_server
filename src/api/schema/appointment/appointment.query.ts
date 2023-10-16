@@ -1,4 +1,4 @@
-import { extendType, idArg, nonNull } from "nexus";
+import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
 
 
@@ -13,6 +13,29 @@ export const appointmentQuery = extendType({
                 return await prisma.appointment.findMany()
             }
         })
+        t.list.field("getAppointmentByDateTime", {
+            type: "appointment",
+            args: { date: nonNull(stringArg()), platform: "platform" },
+            resolve: async (_, { date, platform }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        date: new Date(date),
+                        platform
+                    }
+                })
+            }
+        })
+        t.list.field("getAppointmentByplatform", {
+            type: "appointment",
+            args: { platform: "platform" },
+            resolve: async (_, { platform }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        platform
+                    }
+                })
+            }
+        })
         t.list.field("getAllAppointmentID", {
             type: "appointment",
             args: { appointmentID: nonNull(idArg()) },
@@ -24,18 +47,43 @@ export const appointmentQuery = extendType({
                 })
             }
         })
-        t.list.field("getAllPatientAppointment", {
+        t.list.field("getAppointmentByPlatform", {
             type: "appointment",
-            args: { userID: nonNull(idArg()) },
-            resolve: async (_, { userID }): Promise<any> => {
+            args: { platform: "platform" },
+            resolve: async (_, { platform }): Promise<any> => {
                 return await prisma.appointment.findMany({
                     where: {
+                        platform
+                    }
+                })
+            }
+        })
+        t.list.field("getReportsByPlatform", {
+            type: "appointment",
+            args: { platform: "platform" },
+            resolve: async (_, { platform }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        platform
+                    }
+                })
+            }
+        })
+        t.list.field("getAllPatientAppointment", {
+            type: "appointment",
+            args: { userID: nonNull(idArg()), platform: "platform", status: "status" },
+            resolve: async (_, { userID, platform, status }): Promise<any> => {
+                return await prisma.appointment.findMany({
+                    where: {
+                        platform,
+                        status,
                         user: {
                             some: {
                                 userID
                             }
                         }
-                    }
+                    },
+
                 })
             }
         })

@@ -1,5 +1,5 @@
 import { extendType, idArg, inputObjectType, nonNull } from "nexus";
-import { prisma } from "../../../util/index.js";
+import { prisma, pubsub } from "../../../util/index.js";
 
 
 export const FAQsInput = inputObjectType({
@@ -18,7 +18,7 @@ export const FAQsMutation = extendType({
             type: "faqs",
             args: { faqs: nonNull("faqsInput"), userID: nonNull(idArg()) },
             resolve: async (_, { faqs: { answer, faqs }, userID }): Promise<any> => {
-                return await prisma.faqs.create({
+                const faq = await prisma.faqs.create({
                     data: {
                         answer, faqs,
                         user: {
@@ -28,6 +28,10 @@ export const FAQsMutation = extendType({
                         }
                     }
                 })
+
+                pubsub.publish("createFAQs", faq)
+
+                return faqs
 
             }
         })

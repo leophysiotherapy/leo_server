@@ -27,7 +27,7 @@ import * as FAQs from './api/schema/faqs/faqs.js'
 import * as Prescription from './api/schema/prescriptions/prescription.js'
 import * as Equipment from './api/schema/equipement/equipement.js'
 import * as Appointment from './api/schema/appointment/appointment.js'
-import * as Notifcation from './api/schema/notification/notification.js'
+import * as Diagnosis from './api/schema/diagnosis/diagnosis.js'
 
 (async function StartAppolloServe() {
 
@@ -38,7 +38,7 @@ import * as Notifcation from './api/schema/notification/notification.js'
 
 
     const schema = makeSchema({
-        types: [ User, Scalar, FAQs, Prescription, Equipment, Appointment, Notifcation ],
+        types: [ User, Scalar, FAQs, Prescription, Equipment, Appointment, Diagnosis ],
         outputs: {
             schema: join(process.cwd(), "/src/api/generated/schema.graphql"),
             typegen: join(process.cwd(), "/src/api/generated/schema.ts")

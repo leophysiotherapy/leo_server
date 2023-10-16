@@ -1,4 +1,4 @@
-import { extendType, idArg, nonNull } from "nexus";
+import { extendType, idArg, intArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
 
 
@@ -11,12 +11,33 @@ export const UserQuery = extendType({
                 return await prisma.user.findMany()
             }
         })
-        t.list.field("getAllPhysioStaff", {
+        t.list.field("getPhysioUserByRole", {
             type: "user",
-            resolve: async (): Promise<any> => {
+            args: { role: "roles", take: nonNull(intArg()), limit: nonNull(intArg()) },
+            resolve: async (_, { role, take, limit }): Promise<any> => {
                 return await prisma.user.findMany({
                     where: {
-                        role: "staff"
+                        role
+                    },
+                    take,
+                    skip: limit
+                })
+            }
+        })
+        t.list.field("getSearchuserByRole", {
+            type: "user",
+            args: { search: nonNull(stringArg()), role: "roles" },
+            resolve: async (_, { search, role }): Promise<any> => {
+                return await prisma.user.findMany({
+                    where: {
+                        role,
+                        profile: {
+                            firstname: {
+                                contains: search,
+                                mode: "insensitive"
+                            }
+
+                        }
                     }
                 })
             }
@@ -31,6 +52,24 @@ export const UserQuery = extendType({
                 })
             }
         })
+        t.list.field("getAllPhysioUserBySearch", {
+            type: "user",
+            args: { role: "roles", search: nonNull(stringArg()) },
+            resolve: async (_, { role, search }): Promise<any> => {
+                return await prisma.user.findMany({
+                    where: {
+                        profile: {
+                            firstname: {
+                                contains: search,
+                                mode: "insensitive"
+                            }
+                        },
+                        role
+                    }
+                })
+            }
+        })
+
         t.list.field('getAllPhysioId', {
             type: "user",
             args: { userID: nonNull(idArg()) },

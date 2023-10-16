@@ -7,6 +7,11 @@ export const ProfileObject = objectType({
     name: "profile",
     definition(t) {
         t.id("profileID");
+        t.string("fullname", {
+            resolve: async ({ firstname, lastname }) => {
+                return `${firstname} ${lastname}`
+            }
+        })
         t.string("firstname");
         t.string("lastname");
         t.phone("phone");
