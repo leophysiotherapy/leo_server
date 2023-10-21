@@ -194,15 +194,72 @@ export const appointmentMutation = extendType({
             type: "appointment",
             args: { date: nonNull(stringArg()), time: nonNull(stringArg()), appointmentID: nonNull(idArg()) },
             resolve: async (_, { appointmentID, date, time }): Promise<any> => {
-                return await prisma.appointment.update({
+
+                const findUser = await prisma.user.findMany({
+                    where: {
+                        appointment: {
+                            some: {
+                                appointmentID
+                            }
+                        },
+                    },
+                    include: {
+                        profile: true
+                    }
+                })
+                const appointment = await prisma.appointment.update({
                     data: {
                         date: new Date(date),
                         time
                     },
                     where: {
                         appointmentID
-                    }
+                    },
                 })
+
+
+
+                SendEmail(`${findUser[ 0 ].email}`, "Rescheduling of Consultation", `<html lang="en">
+
+                < head >
+                <meta charset="UTF-8" >
+                <meta name="viewport" content = "width=device-width, initial-scale=1.0" >
+                <link href="/index.css" rel = "stylesheet" />
+
+                <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;" >
+                <table style="width: 500px; border: 1px solid #ccc" >
+                <tr style="height: 60px;" >
+                <td style="font-family: Poppins;" > Dear ${findUser[ 0 ].profile.lastname}, ${findUser[ 0 ].profile.firstname}, </h2>
+                < /td>
+                < /tr>
+                < tr style = "height: 60px;" >
+                <td style="font-family: Poppins;" > We regret to inform you that the upcoming consultation with Dr.Leonardo
+                                needs to be rescheduled due to unforeseen circumstances.Kindly suggest your availability by booking a
+                new appointment through our website.
+                            < /td>
+                    < /tr>
+                    < tr style = "height: 60px;" >
+                        <td style="font-family: Poppins;" > We apologize for any inconvenience caused and appreciate your
+                understanding.
+                            < /td>
+                    < /tr>
+                    < tr style = " height: 40px;" >
+                        <td style="font-family: Poppins;" >
+                            Best regards,
+                                </td>
+                                < /tr>
+
+                                < tr style = "height: 0;" >
+
+                                    <td style="font-family: Poppins;" > Leonardo Physical Theraphy Rehabilitation Clinic < /td>
+                                        < /tr>
+                                        < /table>
+                                        < /body>
+
+                                        < /html>`)
+
+
+                return appointment
             }
         })
         t.field("cancelAdminAppointment", {
