@@ -27,6 +27,7 @@ type EquipmentExpiration {
 }
 
 type Mutation {
+  cancelAdminAppointment(appointmentID: ID!, reason: String!): appointment
   canceledAppointment(appointmentID: ID!): appointment
   createAdminAccount(user: userInput): user
   createAppointment(appointment: appointmentInput, end: String!, platform: platform, userID: ID!): appointment
@@ -40,6 +41,7 @@ type Mutation {
   createPatientDiagnosis(diagnosis: ID!, userID: ID!): diagnosis
   createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
   createProfileAvatar(avatar: String!, profileID: ID!): avatar
+  createSMSNotification(phoneNumber: PhoneNumber!): Boolean
   createStaffAccount(file: Upload, user: userInput): user
   deleteAppointment(appointmentID: ID!): appointment
   deleteBlogPost(blogsID: ID!): blog
@@ -56,6 +58,7 @@ type Mutation {
   updateAppointmentSession(appointment: appointmentInput, appointmentID: ID!, link: String, platform: platform, status: status): appointment
   updateBlogsPost(blog: blogInput, blogsID: ID!): blog
   updateContactNumber(phone: PhoneNumber!, userID: ID!): profile
+  updateDateAppointment(appointmentID: ID!, date: String!, time: String!): appointment
   updateEquipment(equipment: equipmentInput, equipmentID: ID!): equipment
   updateFAQs(faqs: faqsInput!, faqsID: ID!): faqs
   updateOlPatient(diagnosis: String!, prescription: String!, user: userInput, userID: ID!): user
@@ -83,6 +86,7 @@ scalar PhoneNumber
 type Query {
   getAllAppointment: [appointment]
   getAllAppointmentID(appointmentID: ID!): [appointment]
+  getAllAppointmentToday: [appointment]
   getAllBlogsPost: [blog]
   getAllDiagnosis: [diagnosis]
   getAllEquipment(inventories: inventory): [equipment]
@@ -107,7 +111,7 @@ type Query {
   getInventoryExpiration: Int
   getPhysioUserByRole(limit: Int!, role: roles, take: Int!): [user]
   getPrescriptionsById(prescriptionID: ID!): [prescription]
-  getReportsByPlatform(platform: platform): [appointment]
+  getReportsByPlatform(dateFilter: String!, platform: platform!): [appointmentChart]
   getSearchuserByRole(role: roles, search: String!): [user]
 }
 
@@ -133,6 +137,7 @@ scalar Upload
 type appointment {
   amount: Int
   appointmentID: ID
+  createdAt: DateTime
   date: Date
   link: String
   patients: [user]
@@ -140,6 +145,11 @@ type appointment {
   services: String
   status: String
   time: String
+}
+
+type appointmentChart {
+  _all: Int
+  createdAt: Date
 }
 
 input appointmentInput {

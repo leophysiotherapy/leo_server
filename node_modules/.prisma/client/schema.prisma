@@ -150,7 +150,7 @@ model presciption {
   createdAt      DateTime @default(now()) @db.Timestamp()
   updatedAt      DateTime @default(now()) @db.Timestamp()
   patinet        user?    @relation(fields: [userID], references: [userID])
-  userID         String?  @unique
+  userID         String?
 }
 
 model feedback {

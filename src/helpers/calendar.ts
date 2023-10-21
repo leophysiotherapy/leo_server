@@ -9,7 +9,7 @@ const auth = new google.auth.OAuth2({
 
 auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN })
 
-const googleCalendar = async (date: string, time: string, end: string, email: string) => {
+export const googleCalendar = async (date: string, time: string, end: string, email: string) => {
 
     const calendar = google.calendar({ version: 'v3', auth })
     try {
@@ -48,4 +48,16 @@ const googleCalendar = async (date: string, time: string, end: string, email: st
 }
 
 
-export default googleCalendar
+
+
+export const googleCalendarUpdate = async () => {
+    const calendar = google.calendar({ version: 'v3', auth })
+
+    try { 
+        return await calendar.events.update({
+            
+        })
+    } catch(e) {
+
+    }
+}

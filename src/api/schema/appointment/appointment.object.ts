@@ -13,6 +13,7 @@ export const appointmentObject = objectType({
         t.string("status");
         t.int("amount");
         t.string('services')
+        t.datetime("createdAt");
         t.list.field("patients", {
             type: "user",
             resolve: async ({ appointmentID }): Promise<any> => {
@@ -28,4 +29,13 @@ export const appointmentObject = objectType({
             }
         })
     },
+})
+
+
+export const appointmentChart = objectType({
+    name: "appointmentChart",
+    definition(t) {
+        t.int("_all");
+        t.date("createdAt");
+    }
 })

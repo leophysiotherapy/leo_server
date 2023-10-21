@@ -100,7 +100,7 @@ export const UserMutation = extendType({
             resolve: async (_, { user: { email, firstname, lastname, phone, password, } }): Promise<any> => {
                 const pass = await bcryptjs.hash(password, 12);
 
-                await SendEmail(email, `<html lang="en">
+                await SendEmail(email, 'Account Verification', `<html lang="en">
 
                 <head>
                     <meta charset="UTF-8">
@@ -167,11 +167,7 @@ export const UserMutation = extendType({
                                 phone,
                             }
                         },
-                        prescription: {
-                            create: {
-                                prescription: ""
-                            }
-                        },
+
                         diagnosis: {
                             create: {
                                 diagnosis: ""
@@ -390,7 +386,7 @@ export const UserMutation = extendType({
                     }
                 })
 
-                if (users.verified == false) throw new GraphQLError("Please try to verify your account to unlock the features.")
+                if (users && users?.verified === false) throw new GraphQLError("Please try to verify your account to unlock the features.")
 
                 if (!users) throw new GraphQLError("Invalid Email address");
 

@@ -1,14 +1,16 @@
-import { Twilio } from 'twilio'
+import twillio from 'twilio'
+
+const { Twilio } = twillio
 const accoundSid = process.env.TWILLIOACCOUNT
 const AuthToken = process.env.TWILLIOAUTH
-const ownernumber = process.env.OWNERNUMBER
-const client = new Twilio(accoundSid, AuthToken)
+const client = new Twilio(process.env.TWILLIOACCOUNT, process.env.TWILLIOAUTH)
 
 
 export const TextClient = async (clientNumber: string) => {
     client.messages.create({
+        from: '+12295305097',
+        messagingServiceSid: 'MG94f2fb1aa3c0e4289d6b6bfaa9f5cea5',
         to: clientNumber,
-        from: ownernumber,
-        body: ""
+        body: `Good day!, You have an appointment with Leonardo's Physical Therapy Rehabilitation Clinic in just over an hour. We are anticipating seeing you! We appreciate your decision to get your medical needs met by Leonardo's Physical Therapy Rehabilitation Clinic. We appreciate your faith in us. We'll talk soon.`
     })
 }

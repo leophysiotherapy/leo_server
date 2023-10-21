@@ -161,12 +161,17 @@ export interface NexusGenObjects {
   appointment: { // root type
     amount?: number | null; // Int
     appointmentID?: string | null; // ID
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     date?: NexusGenScalars['Date'] | null; // Date
     link?: string | null; // String
     platform?: string | null; // String
     services?: string | null; // String
     status?: string | null; // String
     time?: string | null; // String
+  }
+  appointmentChart: { // root type
+    _all?: number | null; // Int
+    createdAt?: NexusGenScalars['Date'] | null; // Date
   }
   avatar: { // root type
     avatar?: string | null; // String
@@ -253,6 +258,7 @@ export interface NexusGenFieldTypes {
     count: number | null; // Int
   }
   Mutation: { // field return type
+    cancelAdminAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     canceledAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     createAdminAccount: NexusGenRootTypes['user'] | null; // user
     createAppointment: NexusGenRootTypes['appointment'] | null; // appointment
@@ -266,6 +272,7 @@ export interface NexusGenFieldTypes {
     createPatientDiagnosis: NexusGenRootTypes['diagnosis'] | null; // diagnosis
     createPatientPrescription: NexusGenRootTypes['prescription'] | null; // prescription
     createProfileAvatar: NexusGenRootTypes['avatar'] | null; // avatar
+    createSMSNotification: boolean | null; // Boolean
     createStaffAccount: NexusGenRootTypes['user'] | null; // user
     deleteAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     deleteBlogPost: NexusGenRootTypes['blog'] | null; // blog
@@ -282,6 +289,7 @@ export interface NexusGenFieldTypes {
     updateAppointmentSession: NexusGenRootTypes['appointment'] | null; // appointment
     updateBlogsPost: NexusGenRootTypes['blog'] | null; // blog
     updateContactNumber: NexusGenRootTypes['profile'] | null; // profile
+    updateDateAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     updateEquipment: NexusGenRootTypes['equipment'] | null; // equipment
     updateFAQs: NexusGenRootTypes['faqs'] | null; // faqs
     updateOlPatient: NexusGenRootTypes['user'] | null; // user
@@ -302,6 +310,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getAllAppointment: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getAllAppointmentID: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
+    getAllAppointmentToday: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getAllBlogsPost: Array<NexusGenRootTypes['blog'] | null> | null; // [blog]
     getAllDiagnosis: Array<NexusGenRootTypes['diagnosis'] | null> | null; // [diagnosis]
     getAllEquipment: Array<NexusGenRootTypes['equipment'] | null> | null; // [equipment]
@@ -326,7 +335,7 @@ export interface NexusGenFieldTypes {
     getInventoryExpiration: number | null; // Int
     getPhysioUserByRole: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getPrescriptionsById: Array<NexusGenRootTypes['prescription'] | null> | null; // [prescription]
-    getReportsByPlatform: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
+    getReportsByPlatform: Array<NexusGenRootTypes['appointmentChart'] | null> | null; // [appointmentChart]
     getSearchuserByRole: Array<NexusGenRootTypes['user'] | null> | null; // [user]
   }
   Subscription: { // field return type
@@ -337,6 +346,7 @@ export interface NexusGenFieldTypes {
   appointment: { // field return type
     amount: number | null; // Int
     appointmentID: string | null; // ID
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     date: NexusGenScalars['Date'] | null; // Date
     link: string | null; // String
     patients: Array<NexusGenRootTypes['user'] | null> | null; // [user]
@@ -344,6 +354,10 @@ export interface NexusGenFieldTypes {
     services: string | null; // String
     status: string | null; // String
     time: string | null; // String
+  }
+  appointmentChart: { // field return type
+    _all: number | null; // Int
+    createdAt: NexusGenScalars['Date'] | null; // Date
   }
   avatar: { // field return type
     avatar: string | null; // String
@@ -431,6 +445,7 @@ export interface NexusGenFieldTypeNames {
     count: 'Int'
   }
   Mutation: { // field return type name
+    cancelAdminAppointment: 'appointment'
     canceledAppointment: 'appointment'
     createAdminAccount: 'user'
     createAppointment: 'appointment'
@@ -444,6 +459,7 @@ export interface NexusGenFieldTypeNames {
     createPatientDiagnosis: 'diagnosis'
     createPatientPrescription: 'prescription'
     createProfileAvatar: 'avatar'
+    createSMSNotification: 'Boolean'
     createStaffAccount: 'user'
     deleteAppointment: 'appointment'
     deleteBlogPost: 'blog'
@@ -460,6 +476,7 @@ export interface NexusGenFieldTypeNames {
     updateAppointmentSession: 'appointment'
     updateBlogsPost: 'blog'
     updateContactNumber: 'profile'
+    updateDateAppointment: 'appointment'
     updateEquipment: 'equipment'
     updateFAQs: 'faqs'
     updateOlPatient: 'user'
@@ -480,6 +497,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     getAllAppointment: 'appointment'
     getAllAppointmentID: 'appointment'
+    getAllAppointmentToday: 'appointment'
     getAllBlogsPost: 'blog'
     getAllDiagnosis: 'diagnosis'
     getAllEquipment: 'equipment'
@@ -504,7 +522,7 @@ export interface NexusGenFieldTypeNames {
     getInventoryExpiration: 'Int'
     getPhysioUserByRole: 'user'
     getPrescriptionsById: 'prescription'
-    getReportsByPlatform: 'appointment'
+    getReportsByPlatform: 'appointmentChart'
     getSearchuserByRole: 'user'
   }
   Subscription: { // field return type name
@@ -515,6 +533,7 @@ export interface NexusGenFieldTypeNames {
   appointment: { // field return type name
     amount: 'Int'
     appointmentID: 'ID'
+    createdAt: 'DateTime'
     date: 'Date'
     link: 'String'
     patients: 'user'
@@ -522,6 +541,10 @@ export interface NexusGenFieldTypeNames {
     services: 'String'
     status: 'String'
     time: 'String'
+  }
+  appointmentChart: { // field return type name
+    _all: 'Int'
+    createdAt: 'Date'
   }
   avatar: { // field return type name
     avatar: 'String'
@@ -606,6 +629,10 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    cancelAdminAppointment: { // args
+      appointmentID: string; // ID!
+      reason: string; // String!
+    }
     canceledAppointment: { // args
       appointmentID: string; // ID!
     }
@@ -659,6 +686,9 @@ export interface NexusGenArgTypes {
     createProfileAvatar: { // args
       avatar: string; // String!
       profileID: string; // ID!
+    }
+    createSMSNotification: { // args
+      phoneNumber: NexusGenScalars['PhoneNumber']; // PhoneNumber!
     }
     createStaffAccount: { // args
       file?: NexusGenScalars['Upload'] | null; // Upload
@@ -718,6 +748,11 @@ export interface NexusGenArgTypes {
     updateContactNumber: { // args
       phone: NexusGenScalars['PhoneNumber']; // PhoneNumber!
       userID: string; // ID!
+    }
+    updateDateAppointment: { // args
+      appointmentID: string; // ID!
+      date: string; // String!
+      time: string; // String!
     }
     updateEquipment: { // args
       equipment?: NexusGenInputs['equipmentInput'] | null; // equipmentInput
@@ -822,7 +857,8 @@ export interface NexusGenArgTypes {
       prescriptionID: string; // ID!
     }
     getReportsByPlatform: { // args
-      platform?: NexusGenEnums['platform'] | null; // platform
+      dateFilter: string; // String!
+      platform: NexusGenEnums['platform']; // platform!
     }
     getSearchuserByRole: { // args
       role?: NexusGenEnums['roles'] | null; // roles
