@@ -5,6 +5,8 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from "jsonwebtoken";
 import { SendEmail } from "../../../helpers/sendgrid.js";
 import { ImageUpload } from "../../../helpers/aws.js";
+import { create } from "domain";
+import PhoneCheck from "../../../helpers/phoneChecker.js";
 
 
 const { sign } = jsonwebtoken
@@ -22,7 +24,7 @@ export const UserInput = inputObjectType({
         t.string("password");
         t.string("firstname");
         t.string("lastname");
-        t.phone("phone");
+        t.string("phone");
         t.nullable.string("designation");
         t.nullable.string("expertise");
         t.nullable.phone("emergencyPhone");
@@ -62,35 +64,61 @@ export const UserMutation = extendType({
             args: { user: "userInput", file: "Upload" },
             resolve: async (_, { user: { email, firstname, lastname, phone, designation, emergencyPhone, expertise }, file }): Promise<any> => {
 
-                const { createReadStream, filename } = await file;
                 const pass = await bcryptjs.hash("0000", 12);
-                const users = await prisma.user.create({
-                    data: {
-                        email, password: pass,
-                        role: "staff",
-                        verified: true,
-                        profile: {
-                            create: {
-                                firstname,
-                                lastname,
-                                phone,
-                                designation,
-                                expertise,
-                                emergencyPhone,
-                                avatar: {
-                                    create: {
-                                        avatar: await ImageUpload(filename, createReadStream)
+                if (file) {
+
+                    const { createReadStream, filename } = await file;
+                    const users = await prisma.user.create({
+                        data: {
+                            email, password: pass,
+                            role: "staff",
+                            verified: true,
+                            profile: {
+                                create: {
+                                    firstname,
+                                    lastname,
+                                    phone,
+                                    designation,
+                                    expertise,
+                                    emergencyPhone,
+                                    avatar: {
+                                        create: {
+                                            avatar: await ImageUpload(filename, createReadStream)
+                                        }
                                     }
                                 }
                             }
+
                         }
+                    })
 
-                    }
-                })
+                    pubsub.publish("createUserAccount", users)
 
-                pubsub.publish("createUserAccount", users)
+                    return users
+                } else {
+                    const users = await prisma.user.create({
+                        data: {
+                            email, password: pass,
+                            role: "staff",
+                            verified: true,
+                            profile: {
+                                create: {
+                                    firstname,
+                                    lastname,
+                                    phone,
+                                    designation,
+                                    expertise,
+                                    emergencyPhone,
+                                }
+                            }
 
-                return users
+                        }
+                    })
+
+                    pubsub.publish("createUserAccount", users)
+
+                    return users
+                }
             }
 
         })
@@ -100,118 +128,150 @@ export const UserMutation = extendType({
             resolve: async (_, { user: { email, firstname, lastname, phone, password, } }): Promise<any> => {
                 const pass = await bcryptjs.hash(password, 12);
 
-                await SendEmail(email, 'Account Verification', `<html lang="en">
+                const pattern = /^[a-zA-Z0-9._]+@gmail\.com$/;
 
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <link href="/index.css" rel="stylesheet" />
-                
-                    <title>Account Verification</title>
-                
-                    <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
-                        <table style="width: 500px; border: 1px solid #ccc">
-                            <tr style="height: 60px;">
-                                <td style="font-family: Poppins;"> Hello ${lastname}, ${firstname}</h2>
-                                </td>
-                            </tr>
-                            <tr style="height: 60px;">
-                                <td style="font-family: Poppins;"> Welcome to the Restore Rehabilitation Group!</td>
-                            </tr>
-                            <tr style=" height: 60px;">
-                                <td style="font-family: Poppins;">
-                                    Before accessing your account, you must verify your email by
-                                    clicking
-                                    the button or link.
-                                </td>
-                            </tr>
-                            <tr style=" height: 60px;">
-                                <td sstyle="font-family: Poppins;">
-                                    By activating your account, you can access the features that are necessary to continue on
-                                    the
-                                    website.
-                                </td>
-                            </tr>
-                            <tr style="height: 60px;">
-                                <td style="font-family: Poppins;">
-                                    Thank you
-                                </td>
-                            </tr>
+                if (!pattern.test(email)) throw new GraphQLError("Please enter your GMAIL Address")
+
+                if (PhoneCheck(phone)) {
+                    await SendEmail(email, 'Account Verification', `<html lang="en">
+
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link href="/index.css" rel="stylesheet" />
                     
-                            <tr style=" height: 60px;">
-                                <td style=" width: 100%; font-family: Poppins; text-align: center;">
+                        <title>Account Verification</title>
                     
-                                    <a style="text-align: center; background-color: rgb(0, 162, 255); text-align: center; text-decoration: none; color: #fff;  padding: 10px 20px;"
-                                        href="http://localhost:3000/verify/confirmed">Click this</a>
-                                </td>
-                            </tr>
-                            <tr style="height: 60px;">
+                        <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                            <table style="width: 500px; border: 1px solid #ccc">
+                                <tr style="height: 60px;">
+                                    <td style="font-family: Poppins;"> Hello ${lastname}, ${firstname}</h2>
+                                    </td>
+                                </tr>
+                                <tr style="height: 60px;">
+                                    <td style="font-family: Poppins;"> Welcome to the Restore Rehabilitation Group!</td>
+                                </tr>
+                                <tr style=" height: 60px;">
+                                    <td style="font-family: Poppins;">
+                                        Before accessing your account, you must verify your email by
+                                        clicking
+                                        the button or link.
+                                    </td>
+                                </tr>
+                                <tr style=" height: 60px;">
+                                    <td sstyle="font-family: Poppins;">
+                                        By activating your account, you can access the features that are necessary to continue on
+                                        the
+                                        website.
+                                    </td>
+                                </tr>
+                                <tr style="height: 60px;">
+                                    <td style="font-family: Poppins;">
+                                        Thank you
+                                    </td>
+                                </tr>
+                        
+                                <tr style=" height: 60px;">
+                                    <td style=" width: 100%; font-family: Poppins; text-align: center;">
+                        
+                                        <a style="text-align: center; background-color: rgb(0, 162, 255); text-align: center; text-decoration: none; color: #fff;  padding: 10px 20px;"
+                                            href="http://localhost:3000/verify/confirmed">Click this</a>
+                                    </td>
+                                </tr>
+                                <tr style="height: 60px;">
+                        
+                                    <td style="font-family: Poppins;">Restore Rehabilitation
+                                        Group</td>
+                                </tr>
+                            </table>
+                        </body>
                     
-                                <td style="font-family: Poppins;">Restore Rehabilitation
-                                    Group</td>
-                            </tr>
-                        </table>
-                    </body>
-                
-                </html>`)
+                    </html>`)
 
 
-                return await prisma.user.create({
-                    data: {
-                        email, password: pass,
-                        role: "patient",
-                        profile: {
-                            create: {
-                                firstname,
-                                lastname,
-                                phone,
-                            }
-                        },
+                    return await prisma.user.create({
+                        data: {
+                            email, password: pass,
+                            role: "patient",
+                            profile: {
+                                create: {
+                                    firstname,
+                                    lastname,
+                                    phone,
+                                }
+                            },
 
-                        diagnosis: {
-                            create: {
-                                diagnosis: ""
+                            diagnosis: {
+                                create: {
+                                    diagnosis: ""
+                                }
                             }
                         }
-                    }
-                })
+                    })
+                } else {
+                    throw new GraphQLError("Phone number is not valid of the form +17895551234 (7-15 digits)")
+                }
+
+
 
 
             }
         })
         t.field("updateStaffAccount", {
             type: "user",
-            args: { userID: nonNull(idArg()), user: "userInput" },
-            resolve: async (_, { userID, user: { firstname, lastname, phone, designation, expertise, emergencyPhone } }): Promise<any> => {
-                return await prisma.user.update({
-                    where: { userID },
-                    data: {
+            args: { userID: nonNull(idArg()), user: "userInput", file: "Upload" },
+            resolve: async (_, { userID, user: { firstname, lastname, phone, designation, expertise, emergencyPhone }, file }): Promise<any> => {
+                if (file) {
+                    const { createReadStream, filename } = await file
+                    return await prisma.user.update({
+                        where: { userID },
+                        data: {
 
-                        profile: {
-                            update: {
-                                expertise,
-                                emergencyPhone, designation,
-                                firstname,
-                                lastname,
-                                phone,
-                            }
-                        },
-                    }
-                })
+                            profile: {
+                                update: {
+                                    expertise,
+                                    emergencyPhone, designation,
+                                    firstname,
+                                    lastname,
+                                    phone,
+                                    avatar: {
+                                        upsert: {
+                                            create: {
+                                                avatar: await ImageUpload(filename, createReadStream)
+                                            },
+                                            update: {
+                                                avatar: await ImageUpload(filename, createReadStream)
+                                            }
+                                        }
+                                    }
+                                },
+
+                            },
+                        }
+                    })
+                }
             }
         })
         t.field("createOldPatient", {
             type: "user",
-            args: { user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()) },
-            resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, prescription }): Promise<any> => {
+            args: { user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()), time: stringArg(), date: nonNull(stringArg()), platform: "platform" },
+            resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, prescription, time, date, platform }): Promise<any> => {
                 return await prisma.user.create({
                     data: {
                         email,
                         password: await bcryptjs.hash("0000", 12),
+                        verified: true,
                         role: "patient",
                         profile: {
                             create: {
                                 firstname, lastname, phone
+                            },
+                        },
+                        appointment: {
+                            create: {
+                                amount: 175,
+                                date: new Date(date), platform, time,
+                                status: "finished",
                             }
                         },
                         diagnosis: {
@@ -230,8 +290,8 @@ export const UserMutation = extendType({
         })
         t.field("updateOlPatient", {
             type: "user",
-            args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()) },
-            resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis, prescription }): Promise<any> => {
+            args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()), time: stringArg(), date: nonNull(stringArg()), platform: "platform" },
+            resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis, prescription, time, date, platform }): Promise<any> => {
 
                 const userPrescriptions = await prisma.presciption.findMany({
                     where: {
@@ -252,6 +312,15 @@ export const UserMutation = extendType({
                                 firstname, lastname, phone,
                             }
 
+                        },
+                        appointment: {
+                            create: {
+                                link: "",
+                                services: "",
+                                amount: 175,
+                                date: new Date(date), platform, time,
+                                status: "finished",
+                            }
                         },
                         prescription: {
                             upsert: {

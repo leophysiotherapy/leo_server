@@ -118,7 +118,7 @@ export interface NexusGenInputs {
     firstname?: string | null; // String
     lastname?: string | null; // String
     password?: string | null; // String
-    phone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
+    phone?: string | null; // String
   }
 }
 
@@ -265,6 +265,7 @@ export interface NexusGenFieldTypes {
     createBlogPost: NexusGenRootTypes['blog'] | null; // blog
     createEquipment: NexusGenRootTypes['equipment'] | null; // equipment
     createFAQs: NexusGenRootTypes['faqs'] | null; // faqs
+    createFeedback: NexusGenRootTypes['feedback'] | null; // feedback
     createMyFeedback: NexusGenRootTypes['feedback'] | null; // feedback
     createOTP: NexusGenRootTypes['OTP'] | null; // OTP
     createOldPatient: NexusGenRootTypes['user'] | null; // user
@@ -452,6 +453,7 @@ export interface NexusGenFieldTypeNames {
     createBlogPost: 'blog'
     createEquipment: 'equipment'
     createFAQs: 'faqs'
+    createFeedback: 'feedback'
     createMyFeedback: 'feedback'
     createOTP: 'OTP'
     createOldPatient: 'user'
@@ -658,6 +660,11 @@ export interface NexusGenArgTypes {
       faqs: NexusGenInputs['faqsInput']; // faqsInput!
       userID: string; // ID!
     }
+    createFeedback: { // args
+      feedback: string; // String!
+      rating: number; // Int!
+      userID: string; // ID!
+    }
     createMyFeedback: { // args
       appointmentID: string; // ID!
       feedback: string; // String!
@@ -668,8 +675,11 @@ export interface NexusGenArgTypes {
       email: NexusGenScalars['EmailAddress']; // EmailAddress!
     }
     createOldPatient: { // args
+      date: string; // String!
       diagnosis: string; // String!
+      platform?: NexusGenEnums['platform'] | null; // platform
       prescription: string; // String!
+      time?: string | null; // String
       user?: NexusGenInputs['userInput'] | null; // userInput
     }
     createPatientAccount: { // args
@@ -763,8 +773,11 @@ export interface NexusGenArgTypes {
       faqsID: string; // ID!
     }
     updateOlPatient: { // args
+      date: string; // String!
       diagnosis: string; // String!
+      platform?: NexusGenEnums['platform'] | null; // platform
       prescription: string; // String!
+      time?: string | null; // String
       user?: NexusGenInputs['userInput'] | null; // userInput
       userID: string; // ID!
     }
@@ -788,6 +801,7 @@ export interface NexusGenArgTypes {
       prescriptionID: string; // ID!
     }
     updateStaffAccount: { // args
+      file?: NexusGenScalars['Upload'] | null; // Upload
       user?: NexusGenInputs['userInput'] | null; // userInput
       userID: string; // ID!
     }

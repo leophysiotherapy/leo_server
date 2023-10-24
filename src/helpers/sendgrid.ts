@@ -13,6 +13,6 @@ export async function SendEmail(email: string, subject: string, message: string)
     }
 
 
-    sendMail.send(msg)
+    sendMail.send(msg).then((data) => (console.log(data ))).catch(e => console.log(e.message))
 }
 

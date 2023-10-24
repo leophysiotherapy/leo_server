@@ -37,71 +37,43 @@ export const OTPMutation = extendType({
                 })
 
 
-                SendEmail(email, `
-                <!DOCTYPE html>
+                SendEmail(email, `Reset Password OTP`, `
                 <html lang="en">
-
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Document</title>
-                </head>
-
-
-                <body style="   width: 100%;
-                    height: 100vh;
-                    box-sizing: border-box;
-                    padding: 0;
-                    margin: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;">
-                    <div style="           
-                    height: 500px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
-                    gap: 10px;">
-
-                        <h2 style=" width: 100%;
-                        height: auto;
-                        text-align: left; font-size: 22px;">Dear ${profile.profile.lastname}, ${profile.profile.firstname}</h2>
-
-                        <span style=" width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 18px;">
-                            Your One-Time Password (OTP) for secure access is: [OTP Code].
-                        </span>
-
-                        <span style=" width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 17px;">
-                            Please do not share this OTP with anyone, as it is valid for a single use only.
-                        </span>
-                        <span style=" width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 17px;">
-                            If you did not request this OTP, please ignore this message.
-                        </span>
-                        <br />
-                        <span style=" width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 17px;">
-                            Thank you,
-                        </span>
-                        <br />
-                        <span style=" width: 100%;
-                        text-align: left;
-                        height: auto;
-                        font-size: 17px;">Restore Rehabilitation Group</span>
-                    </div>
+                    <link href="/index.css" rel="stylesheet" />
+                
+                <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                    <table style="width: 500px; border: 1px solid #ccc">
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">Dear ${profile.profile.lastname}, ${profile.profile.firstname}</h2>
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">Your One-Time Password (OTP) for secure access is: ${otps.otp}.
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">Please do not share this OTP with anyone, as it is valid for a single use
+                                only.
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">If you did not request this OTP, please ignore this message.
+                            </td>
+                        </tr>
+                        <tr style=" height: 40px;">
+                            <td style="font-family: Poppins;">
+                                Best regards,
+                            </td>
+                        </tr>
+                        <tr style="height: 0;">
+                            <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
+                        </tr>
+                    </table>
                 </body>
-
+                
                 </html>
              `)
 
