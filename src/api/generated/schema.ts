@@ -328,6 +328,7 @@ export interface NexusGenFieldTypes {
     getAppointmentByPlatform: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getAppointmentByplatform: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getBlogSearch: Array<NexusGenRootTypes['blog'] | null> | null; // [blog]
+    getBlogsById: Array<NexusGenRootTypes['blog'] | null> | null; // [blog]
     getDiagnosisID: Array<NexusGenRootTypes['diagnosis'] | null> | null; // [diagnosis]
     getFeedbackById: Array<NexusGenRootTypes['feedback'] | null> | null; // [feedback]
     getFindFAQsQuestion: Array<NexusGenRootTypes['faqs'] | null> | null; // [faqs]
@@ -516,6 +517,7 @@ export interface NexusGenFieldTypeNames {
     getAppointmentByPlatform: 'appointment'
     getAppointmentByplatform: 'appointment'
     getBlogSearch: 'blog'
+    getBlogsById: 'blog'
     getDiagnosisID: 'diagnosis'
     getFeedbackById: 'feedback'
     getFindFAQsQuestion: 'faqs'
@@ -846,6 +848,9 @@ export interface NexusGenArgTypes {
     }
     getBlogSearch: { // args
       search: string; // String!
+    }
+    getBlogsById: { // args
+      blogsID: string; // ID!
     }
     getDiagnosisID: { // args
       diagnosisID: string; // ID!

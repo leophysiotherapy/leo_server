@@ -104,6 +104,7 @@ type Query {
   getAppointmentByPlatform(platform: platform): [appointment]
   getAppointmentByplatform(platform: platform): [appointment]
   getBlogSearch(search: String!): [blog]
+  getBlogsById(blogsID: ID!): [blog]
   getDiagnosisID(diagnosisID: ID!): [diagnosis]
   getFeedbackById(feedbackID: ID!): [feedback]
   getFindFAQsQuestion(search: String!): [faqs]

@@ -6,6 +6,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
+        "noEmit": true,
         "lib": [
             "ES6",
             "DOM",
@@ -24,7 +25,11 @@
         "compilerOptions": {
             "module": "NodeNext",
             "esModuleInterop": true,
-            "moduleResolution": "NodeNext"
+            "moduleResolution": "NodeNext",
+            "lib": [
+                "DOM",
+                "ESNext"
+            ]
         }
     }
 }

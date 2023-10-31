@@ -1,4 +1,4 @@
-import { extendType, nonNull, stringArg } from "nexus";
+import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../../util/index.js";
 
 
@@ -10,6 +10,17 @@ export const BlogQuery = extendType({
             type: "blog",
             resolve: async (): Promise<any> => {
                 return await prisma.blogs.findMany()
+            }
+        })
+        t.list.field("getBlogsById", {
+            type: "blog",
+            args: { blogsID: nonNull(idArg()) },
+            resolve: async (_, { blogsID }): Promise<any> => {
+                return await prisma.blogs.findMany({
+                    where: {
+                        blogsID
+                    }
+                })
             }
         })
         t.list.field("getBlogSearch", {

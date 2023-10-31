@@ -5,7 +5,6 @@ import bcryptjs from 'bcryptjs'
 import jsonwebtoken from "jsonwebtoken";
 import { SendEmail } from "../../../helpers/sendgrid.js";
 import { ImageUpload } from "../../../helpers/aws.js";
-import { create } from "domain";
 import PhoneCheck from "../../../helpers/phoneChecker.js";
 
 
@@ -180,8 +179,7 @@ export const UserMutation = extendType({
                                 </tr>
                                 <tr style="height: 60px;">
                         
-                                    <td style="font-family: Poppins;">Restore Rehabilitation
-                                        Group</td>
+                                    <td style="font-family: Poppins;">Leonardo Physical Therapy Rehabilitation</td>
                                 </tr>
                             </table>
                         </body>
@@ -226,7 +224,6 @@ export const UserMutation = extendType({
                     return await prisma.user.update({
                         where: { userID },
                         data: {
-
                             profile: {
                                 update: {
                                     expertise,
@@ -244,6 +241,22 @@ export const UserMutation = extendType({
                                             }
                                         }
                                     }
+                                },
+
+                            },
+                        }
+                    })
+                } else {
+                    return await prisma.user.update({
+                        where: { userID },
+                        data: {
+                            profile: {
+                                update: {
+                                    expertise,
+                                    emergencyPhone, designation,
+                                    firstname,
+                                    lastname,
+                                    phone,
                                 },
 
                             },
@@ -315,8 +328,6 @@ export const UserMutation = extendType({
                         },
                         appointment: {
                             create: {
-                                link: "",
-                                services: "",
                                 amount: 175,
                                 date: new Date(date), platform, time,
                                 status: "finished",
@@ -457,11 +468,11 @@ export const UserMutation = extendType({
 
                 if (users && users?.verified === false) throw new GraphQLError("Please try to verify your account to unlock the features.")
 
-                if (!users) throw new GraphQLError("Invalid Email address");
+                if (!users) throw new GraphQLError("Incorrect Email address or Password");
 
                 const pass = await bcryptjs.compareSync(password, users.password);
 
-                if (!pass) throw new GraphQLError("Invalid Password");
+                if (!pass) throw new GraphQLError("Incorrect Email address or Password");
 
 
                 const token = sign({ userID: users.userID, role: users.role, verfied: users.verified }, "physio_token", {

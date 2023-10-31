@@ -30,7 +30,7 @@ export const ImageUpload = async (filename: string, body: any): Promise<any> => 
     })
 
     UploadLibStorage.on("httpUploadProgress", (data) => {
-        result = `https://ustproject.s3.ap-southeast-1.amazonaws.com/${data.Key}`
+        result = `https://leophysio.s3.us-east-2.amazonaws.com/${data.Key}`
     })
 
 

@@ -1,8 +1,6 @@
 import twillio from 'twilio'
 
 const { Twilio } = twillio
-const accoundSid = process.env.TWILLIOACCOUNT
-const AuthToken = process.env.TWILLIOAUTH
 const client = new Twilio(process.env.TWILLIOACCOUNT, process.env.TWILLIOAUTH)
 
 
