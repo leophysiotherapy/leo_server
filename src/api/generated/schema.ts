@@ -764,6 +764,7 @@ export interface NexusGenArgTypes {
     updateDateAppointment: { // args
       appointmentID: string; // ID!
       date: string; // String!
+      reason: string; // String!
       time: string; // String!
     }
     updateEquipment: { // args

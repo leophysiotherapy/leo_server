@@ -148,7 +148,7 @@ export const UserMutation = extendType({
                                     </td>
                                 </tr>
                                 <tr style="height: 60px;">
-                                    <td style="font-family: Poppins;"> Welcome to the Restore Rehabilitation Group!</td>
+                                    <td style="font-family: Poppins;"> Welcome to the Leonardo Physical Therapy Rehabilitation Clinic!</td>
                                 </tr>
                                 <tr style=" height: 60px;">
                                     <td style="font-family: Poppins;">

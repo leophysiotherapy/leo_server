@@ -59,7 +59,7 @@ type Mutation {
   updateAppointmentSession(appointment: appointmentInput, appointmentID: ID!, link: String, platform: platform, status: status): appointment
   updateBlogsPost(blog: blogInput, blogsID: ID!): blog
   updateContactNumber(phone: PhoneNumber!, userID: ID!): profile
-  updateDateAppointment(appointmentID: ID!, date: String!, time: String!): appointment
+  updateDateAppointment(appointmentID: ID!, date: String!, reason: String!, time: String!): appointment
   updateEquipment(equipment: equipmentInput, equipmentID: ID!): equipment
   updateFAQs(faqs: faqsInput!, faqsID: ID!): faqs
   updateOlPatient(date: String!, diagnosis: String!, platform: platform, prescription: String!, time: String, user: userInput, userID: ID!): user

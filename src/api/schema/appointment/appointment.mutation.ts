@@ -192,8 +192,8 @@ export const appointmentMutation = extendType({
         })
         t.field("updateDateAppointment", {
             type: "appointment",
-            args: { date: nonNull(stringArg()), time: nonNull(stringArg()), appointmentID: nonNull(idArg()) },
-            resolve: async (_, { appointmentID, date, time }): Promise<any> => {
+            args: { date: nonNull(stringArg()), time: nonNull(stringArg()), appointmentID: nonNull(idArg()), reason: nonNull(stringArg()) },
+            resolve: async (_, { appointmentID, date, time, reason }): Promise<any> => {
 
                 const findUser = await prisma.user.findMany({
                     where: {
@@ -221,42 +221,42 @@ export const appointmentMutation = extendType({
 
                 SendEmail(`${findUser[ 0 ].email}`, "Rescheduling of Consultation", `<html lang="en">
 
-                < head >
-                <meta charset="UTF-8" >
-                <meta name="viewport" content = "width=device-width, initial-scale=1.0" >
-                <link href="/index.css" rel = "stylesheet" />
-
-                <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;" >
-                <table style="width: 500px; border: 1px solid #ccc" >
-                <tr style="height: 60px;" >
-                <td style="font-family: Poppins;" > Dear ${findUser[ 0 ].profile.lastname}, ${findUser[ 0 ].profile.firstname}, </h2>
-                < /td>
-                < /tr>
-                < tr style = "height: 60px;" >
-                <td style="font-family: Poppins;" > We regret to inform you that the upcoming consultation with Dr.Leonardo
-                                needs to be rescheduled due to unforeseen circumstances.Kindly suggest your availability by booking a
-                new appointment through our website.
-                            < /td>
-                    < /tr>
-                    < tr style = "height: 60px;" >
-                        <td style="font-family: Poppins;" > We apologize for any inconvenience caused and appreciate your
-                understanding.
-                            < /td>
-                    < /tr>
-                    < tr style = " height: 40px;" >
-                        <td style="font-family: Poppins;" >
-                            Best regards,
-                                </td>
-                                < /tr>
-
-                                < tr style = "height: 0;" >
-
-                                    <td style="font-family: Poppins;" > Leonardo Physical Theraphy Rehabilitation Clinic < /td>
-                                        < /tr>
-                                        < /table>
-                                        < /body>
-
-                                        < /html>`)
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link href="/index.css" rel="stylesheet" />
+                
+                <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                    <table style="width: 500px; border: 1px solid #ccc">
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;"> Dear ${findUser[ 0 ].profile.lastname}, ${findUser[ 0
+                    ].profile.firstname}, </h2>
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;"> We regret to inform you that the upcoming consultation with
+                                Dr.Leonardo
+                                needs to be rescheduled due to ${reason}.Kindly suggest your availability by booking a
+                                new appointment through our website.
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;"> We apologize for any inconvenience caused and appreciate your
+                                understanding.
+                            </td>
+                        </tr>
+                        <tr style=" height: 40px;">
+                            <td style="font-family: Poppins;">
+                                Best regards,
+                            </td>
+                        </tr>
+                        <tr style="height: 0;">
+                            <td style="font-family: Poppins;"> Leonardo Physical Theraphy Rehabilitation Clinic </td>
+                        </tr>
+                    </table>
+                </body>
+                
+                </html>`)
 
 
                 return appointment
@@ -265,7 +265,7 @@ export const appointmentMutation = extendType({
         t.field("cancelAdminAppointment", {
             type: "appointment",
             args: { reason: nonNull(stringArg()), appointmentID: nonNull(idArg()) },
-            resolve: async (_, { appointmentID }): Promise<any> => {
+            resolve: async (_, { appointmentID, reason }): Promise<any> => {
 
 
 
@@ -310,7 +310,7 @@ export const appointmentMutation = extendType({
                         </tr>
                         <tr style="height: 60px;">
                             <td style="font-family: Poppins;">We regret to inform you that the scheduled consultation with Dr. Leonardo
-                                has been canceled due to unforeseen circumstances. We apologize for any inconvenience this may cause.
+                                has been canceled due to ${reason}. We apologize for any inconvenience this may cause.
                             </td>
                         </tr>
                         <tr style=" height: 40px;">
