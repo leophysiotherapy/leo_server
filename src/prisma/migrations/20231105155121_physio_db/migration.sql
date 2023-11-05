@@ -27,6 +27,17 @@ CREATE TABLE "user" (
 );
 
 -- CreateTable
+CREATE TABLE "services" (
+    "servicesID" TEXT NOT NULL,
+    "services" TEXT NOT NULL,
+    "descriptions" TEXT NOT NULL,
+    "image" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+
+    CONSTRAINT "services_pkey" PRIMARY KEY ("servicesID")
+);
+
+-- CreateTable
 CREATE TABLE "otp" (
     "otpID" TEXT NOT NULL,
     "otp" TEXT NOT NULL,

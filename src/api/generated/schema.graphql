@@ -43,6 +43,7 @@ type Mutation {
   createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
   createProfileAvatar(avatar: String!, profileID: ID!): avatar
   createSMSNotification(phoneNumber: PhoneNumber!): Boolean
+  createServices(descriptions: String!, file: Upload, services: String!): services
   createStaffAccount(file: Upload, user: userInput): user
   deleteAppointment(appointmentID: ID!): appointment
   deleteBlogPost(blogsID: ID!): blog
@@ -51,6 +52,7 @@ type Mutation {
   deleteMyFeedback(feedbackID: ID!): feedback
   deletePatientDiagnosis(diagnosisID: ID!): diagnosis
   deletePrescrpition(prescriptionID: ID!): prescription
+  deleteServices(servicesID: ID!): services
   deleteUserAcc(userID: ID!): user
   findEmailAddress(email: EmailAddress!): user
   login(email: ID!, password: String!): token
@@ -67,6 +69,7 @@ type Mutation {
   updatePatientAccount(firstname: ID!, lastname: String!, phone: PhoneNumber!, userID: ID!): user
   updatePatientDiagnosis(diagnosis: String!, diagnosisID: ID!): diagnosis
   updatePrescription(prescription: prescriptionInput, prescriptionID: ID!): prescription
+  updateServices(descriptions: String!, file: Upload, services: String!, servicesID: ID!): services
   updateStaffAccount(file: Upload, user: userInput, userID: ID!): user
   updateUserVerifiedAcc(email: EmailAddress!): user
   verifyOTP(otp: String!): OTP
@@ -99,6 +102,7 @@ type Query {
   getAllPhysioPatient: [user]
   getAllPhysioUserBySearch(role: roles, search: String!): [user]
   getAllPrescription: [prescription]
+  getAllServices: [services]
   getAllUser: [user]
   getAppointmentByDateTime(date: String!, platform: platform): [appointment]
   getAppointmentByPlatform(platform: platform): [appointment]
@@ -115,6 +119,7 @@ type Query {
   getPrescriptionsById(prescriptionID: ID!): [prescription]
   getReportsByPlatform(dateFilter: String!, platform: platform!): [appointmentChart]
   getSearchuserByRole(role: roles, search: String!): [user]
+  getServicesBySearch(search: String!): [services]
 }
 
 type Subscription {
@@ -269,6 +274,14 @@ enum roles {
   admin
   patient
   staff
+}
+
+type services {
+  descriptions: String
+  image: String
+  price: Int
+  services: String
+  servicesID: ID
 }
 
 enum status {

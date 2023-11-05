@@ -229,6 +229,13 @@ export interface NexusGenObjects {
     phone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
     profileID?: string | null; // ID
   }
+  services: { // root type
+    descriptions?: string | null; // String
+    image?: string | null; // String
+    price?: number | null; // Int
+    services?: string | null; // String
+    servicesID?: string | null; // ID
+  }
   token: { // root type
     token?: string | null; // String
   }
@@ -274,6 +281,7 @@ export interface NexusGenFieldTypes {
     createPatientPrescription: NexusGenRootTypes['prescription'] | null; // prescription
     createProfileAvatar: NexusGenRootTypes['avatar'] | null; // avatar
     createSMSNotification: boolean | null; // Boolean
+    createServices: NexusGenRootTypes['services'] | null; // services
     createStaffAccount: NexusGenRootTypes['user'] | null; // user
     deleteAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     deleteBlogPost: NexusGenRootTypes['blog'] | null; // blog
@@ -282,6 +290,7 @@ export interface NexusGenFieldTypes {
     deleteMyFeedback: NexusGenRootTypes['feedback'] | null; // feedback
     deletePatientDiagnosis: NexusGenRootTypes['diagnosis'] | null; // diagnosis
     deletePrescrpition: NexusGenRootTypes['prescription'] | null; // prescription
+    deleteServices: NexusGenRootTypes['services'] | null; // services
     deleteUserAcc: NexusGenRootTypes['user'] | null; // user
     findEmailAddress: NexusGenRootTypes['user'] | null; // user
     login: NexusGenRootTypes['token'] | null; // token
@@ -298,6 +307,7 @@ export interface NexusGenFieldTypes {
     updatePatientAccount: NexusGenRootTypes['user'] | null; // user
     updatePatientDiagnosis: NexusGenRootTypes['diagnosis'] | null; // diagnosis
     updatePrescription: NexusGenRootTypes['prescription'] | null; // prescription
+    updateServices: NexusGenRootTypes['services'] | null; // services
     updateStaffAccount: NexusGenRootTypes['user'] | null; // user
     updateUserVerifiedAcc: NexusGenRootTypes['user'] | null; // user
     verifyOTP: NexusGenRootTypes['OTP'] | null; // OTP
@@ -323,6 +333,7 @@ export interface NexusGenFieldTypes {
     getAllPhysioPatient: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPhysioUserBySearch: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPrescription: Array<NexusGenRootTypes['prescription'] | null> | null; // [prescription]
+    getAllServices: Array<NexusGenRootTypes['services'] | null> | null; // [services]
     getAllUser: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAppointmentByDateTime: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     getAppointmentByPlatform: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
@@ -339,6 +350,7 @@ export interface NexusGenFieldTypes {
     getPrescriptionsById: Array<NexusGenRootTypes['prescription'] | null> | null; // [prescription]
     getReportsByPlatform: Array<NexusGenRootTypes['appointmentChart'] | null> | null; // [appointmentChart]
     getSearchuserByRole: Array<NexusGenRootTypes['user'] | null> | null; // [user]
+    getServicesBySearch: Array<NexusGenRootTypes['services'] | null> | null; // [services]
   }
   Subscription: { // field return type
     FAQsSubscriptions: NexusGenRootTypes['faqs'] | null; // faqs
@@ -424,6 +436,13 @@ export interface NexusGenFieldTypes {
     phone: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
     profileID: string | null; // ID
   }
+  services: { // field return type
+    descriptions: string | null; // String
+    image: string | null; // String
+    price: number | null; // Int
+    services: string | null; // String
+    servicesID: string | null; // ID
+  }
   token: { // field return type
     token: string | null; // String
   }
@@ -463,6 +482,7 @@ export interface NexusGenFieldTypeNames {
     createPatientPrescription: 'prescription'
     createProfileAvatar: 'avatar'
     createSMSNotification: 'Boolean'
+    createServices: 'services'
     createStaffAccount: 'user'
     deleteAppointment: 'appointment'
     deleteBlogPost: 'blog'
@@ -471,6 +491,7 @@ export interface NexusGenFieldTypeNames {
     deleteMyFeedback: 'feedback'
     deletePatientDiagnosis: 'diagnosis'
     deletePrescrpition: 'prescription'
+    deleteServices: 'services'
     deleteUserAcc: 'user'
     findEmailAddress: 'user'
     login: 'token'
@@ -487,6 +508,7 @@ export interface NexusGenFieldTypeNames {
     updatePatientAccount: 'user'
     updatePatientDiagnosis: 'diagnosis'
     updatePrescription: 'prescription'
+    updateServices: 'services'
     updateStaffAccount: 'user'
     updateUserVerifiedAcc: 'user'
     verifyOTP: 'OTP'
@@ -512,6 +534,7 @@ export interface NexusGenFieldTypeNames {
     getAllPhysioPatient: 'user'
     getAllPhysioUserBySearch: 'user'
     getAllPrescription: 'prescription'
+    getAllServices: 'services'
     getAllUser: 'user'
     getAppointmentByDateTime: 'appointment'
     getAppointmentByPlatform: 'appointment'
@@ -528,6 +551,7 @@ export interface NexusGenFieldTypeNames {
     getPrescriptionsById: 'prescription'
     getReportsByPlatform: 'appointmentChart'
     getSearchuserByRole: 'user'
+    getServicesBySearch: 'services'
   }
   Subscription: { // field return type name
     FAQsSubscriptions: 'faqs'
@@ -612,6 +636,13 @@ export interface NexusGenFieldTypeNames {
     lastname: 'String'
     phone: 'PhoneNumber'
     profileID: 'ID'
+  }
+  services: { // field return type name
+    descriptions: 'String'
+    image: 'String'
+    price: 'Int'
+    services: 'String'
+    servicesID: 'ID'
   }
   token: { // field return type name
     token: 'String'
@@ -702,6 +733,11 @@ export interface NexusGenArgTypes {
     createSMSNotification: { // args
       phoneNumber: NexusGenScalars['PhoneNumber']; // PhoneNumber!
     }
+    createServices: { // args
+      descriptions: string; // String!
+      file?: NexusGenScalars['Upload'] | null; // Upload
+      services: string; // String!
+    }
     createStaffAccount: { // args
       file?: NexusGenScalars['Upload'] | null; // Upload
       user?: NexusGenInputs['userInput'] | null; // userInput
@@ -726,6 +762,9 @@ export interface NexusGenArgTypes {
     }
     deletePrescrpition: { // args
       prescriptionID: string; // ID!
+    }
+    deleteServices: { // args
+      servicesID: string; // ID!
     }
     deleteUserAcc: { // args
       userID: string; // ID!
@@ -802,6 +841,12 @@ export interface NexusGenArgTypes {
     updatePrescription: { // args
       prescription?: NexusGenInputs['prescriptionInput'] | null; // prescriptionInput
       prescriptionID: string; // ID!
+    }
+    updateServices: { // args
+      descriptions: string; // String!
+      file?: NexusGenScalars['Upload'] | null; // Upload
+      services: string; // String!
+      servicesID: string; // ID!
     }
     updateStaffAccount: { // args
       file?: NexusGenScalars['Upload'] | null; // Upload
@@ -882,6 +927,9 @@ export interface NexusGenArgTypes {
     }
     getSearchuserByRole: { // args
       role?: NexusGenEnums['roles'] | null; // roles
+      search: string; // String!
+    }
+    getServicesBySearch: { // args
       search: string; // String!
     }
   }
