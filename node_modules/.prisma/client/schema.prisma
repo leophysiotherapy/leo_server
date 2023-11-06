@@ -57,6 +57,14 @@ model user {
   otp          otp[]
 }
 
+model services {
+  servicesID   String @id @default(cuid())
+  services     String
+  descriptions String
+  image        String
+  price        Float
+}
+
 model otp {
   otpID     String   @id @default(cuid())
   otp       String   @unique
