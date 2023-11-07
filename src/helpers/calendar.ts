@@ -18,14 +18,14 @@ export const googleCalendar = async (date: string, time: string, end: string, em
             calendarId: "primary",
             requestBody: {
 
-                summary: "Physio Theraphy Appointment",
+                summary: "Physio Therapy Appointment",
                 start: {
                     dateTime: `${new Date(date).toISOString().slice(0, 10)}T${time}:00.000Z`,
-                    timeZone: "Asia/Manila"
+                    timeZone: "PST/California"
                 },
                 end: {
                     dateTime: `${new Date(date).toISOString().slice(0, 10)}T${end}:00.000Z`,
-                    timeZone: "Asia/Manila"
+                    timeZone: "PST/California"
                 },
                 recurrence: [
                     'RRULE:FREQ=DAILY;COUNT=1'
@@ -53,11 +53,11 @@ export const googleCalendar = async (date: string, time: string, end: string, em
 export const googleCalendarUpdate = async () => {
     const calendar = google.calendar({ version: 'v3', auth })
 
-    try { 
+    try {
         return await calendar.events.update({
-            
+
         })
-    } catch(e) {
+    } catch (e) {
 
     }
 }

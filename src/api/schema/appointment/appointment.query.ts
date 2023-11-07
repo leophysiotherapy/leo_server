@@ -18,6 +18,9 @@ export const appointmentQuery = extendType({
                 return await prisma.appointment.findMany({
                     where: {
                         date: new Date(format(new Date(), "yyyy-MM-dd"))
+                    },
+                    orderBy: {
+                        time: "desc"
                     }
                 })
             }

@@ -22,7 +22,7 @@ export const EquipmentQuery = extendType({
             resolve: async (): Promise<any> => {
                 const inv = await prisma.$queryRawUnsafe(`SELECT COUNT(*)
                 FROM public.equipment
-                WHERE "expireDate" > CURRENT_DATE
+                WHERE "expireDate" > CURRENT_DATE - INTERVAL '1 Year'
                 AND  "expireDate" <= CURRENT_DATE + INTERVAL '7 DAY'`)
 
                 return parseInt(inv[ 0 ].count)

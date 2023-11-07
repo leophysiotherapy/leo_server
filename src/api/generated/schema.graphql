@@ -32,6 +32,7 @@ type Mutation {
   createAdminAccount(user: userInput): user
   createAppointment(appointment: appointmentInput, end: String!, platform: platform, userID: ID!): appointment
   createBlogPost(blog: blogInput, userID: ID!): blog
+  createEmailNotification(email: EmailAddress!): Boolean
   createEquipment(equipment: equipmentInput, inventory: inventory, userID: ID!): equipment
   createFAQs(faqs: faqsInput!, userID: ID!): faqs
   createFeedback(feedback: String!, rating: Int!, userID: ID!): feedback

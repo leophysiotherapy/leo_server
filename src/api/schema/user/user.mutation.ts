@@ -187,6 +187,14 @@ export const UserMutation = extendType({
                     </html>`)
 
 
+                    const checkEmail = await prisma.user.findUnique({
+                        where: {
+                            email
+                        }
+                    })
+
+                    if (checkEmail.email === email) throw new GraphQLError("Email already used");
+
                     return await prisma.user.create({
                         data: {
                             email, password: pass,
@@ -467,6 +475,7 @@ export const UserMutation = extendType({
                 })
 
                 if (users && users?.verified === false) throw new GraphQLError("Please try to verify your account to unlock the features.")
+
 
                 if (!users) throw new GraphQLError("Incorrect Email address or Password");
 

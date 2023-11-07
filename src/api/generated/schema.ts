@@ -270,6 +270,7 @@ export interface NexusGenFieldTypes {
     createAdminAccount: NexusGenRootTypes['user'] | null; // user
     createAppointment: NexusGenRootTypes['appointment'] | null; // appointment
     createBlogPost: NexusGenRootTypes['blog'] | null; // blog
+    createEmailNotification: boolean | null; // Boolean
     createEquipment: NexusGenRootTypes['equipment'] | null; // equipment
     createFAQs: NexusGenRootTypes['faqs'] | null; // faqs
     createFeedback: NexusGenRootTypes['feedback'] | null; // feedback
@@ -471,6 +472,7 @@ export interface NexusGenFieldTypeNames {
     createAdminAccount: 'user'
     createAppointment: 'appointment'
     createBlogPost: 'blog'
+    createEmailNotification: 'Boolean'
     createEquipment: 'equipment'
     createFAQs: 'faqs'
     createFeedback: 'feedback'
@@ -683,6 +685,9 @@ export interface NexusGenArgTypes {
     createBlogPost: { // args
       blog?: NexusGenInputs['blogInput'] | null; // blogInput
       userID: string; // ID!
+    }
+    createEmailNotification: { // args
+      email: NexusGenScalars['EmailAddress']; // EmailAddress!
     }
     createEquipment: { // args
       equipment?: NexusGenInputs['equipmentInput'] | null; // equipmentInput
