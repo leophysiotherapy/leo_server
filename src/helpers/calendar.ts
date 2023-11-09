@@ -21,11 +21,11 @@ export const googleCalendar = async (date: string, time: string, end: string, em
                 summary: "Physio Therapy Appointment",
                 start: {
                     dateTime: `${new Date(date).toISOString().slice(0, 10)}T${time}:00.000Z`,
-                    timeZone: "PST/California"
+                    timeZone: "America/Los_Angeles"
                 },
                 end: {
                     dateTime: `${new Date(date).toISOString().slice(0, 10)}T${end}:00.000Z`,
-                    timeZone: "PST/California"
+                    timeZone: "America/Los_Angeles"
                 },
                 recurrence: [
                     'RRULE:FREQ=DAILY;COUNT=1'
