@@ -22,7 +22,6 @@
    "license": "ISC",
    "dependencies": {
       "@apollo/server": "^4.9.5",
-      "@aws-sdk/client-s3": "^3.449.0",
       "@aws-sdk/lib-storage": "^3.449.0",
       "@paypal/checkout-server-sdk": "^1.0.3",
       "@prisma/client": "^5.5.2",
