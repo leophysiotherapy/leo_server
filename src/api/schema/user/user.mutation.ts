@@ -139,7 +139,7 @@ export const UserMutation = extendType({
                         }
                     })
 
-                    if (checkEmail.email) throw new GraphQLError("Email already used");
+                    if (checkEmail) throw new GraphQLError("Email already used");
                     await SendEmail(email, 'Account Verification', `<html lang="en">
 
                     <head>
