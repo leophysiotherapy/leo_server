@@ -11,7 +11,7 @@
    },
    "scripts": {
       "start": "ts-node src/server.ts",
-      "postinstall": "npx generate prisma"
+      "postinstall": "npx prisma generate --schema=./src/prisma/schema.prisma"
    },
    "keywords": [],
    "author": "",
