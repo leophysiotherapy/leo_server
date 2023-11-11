@@ -3,10 +3,10 @@ import { S3 } from '@aws-sdk/client-s3'
 
 
 const client = new S3({
-    region: process.env.REGION,
+    region: "us-east-2",
     credentials: {
-        accessKeyId: process.env.ACCESSKEY,
-        secretAccessKey: process.env.SECRETKEY
+        accessKeyId: "AKIASBRBH3T5DEZKU6FQ",
+        secretAccessKey: "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"
     }
 });
 
@@ -21,7 +21,7 @@ export const ImageUpload = async (filename: string, body: any): Promise<any> => 
     const UploadLibStorage = new Upload({
         client,
         params: {
-            Bucket: process.env.BUCKET,
+            Bucket: "leophysio",
             Key: filename,
             Body: body(),
             ACL: "public-read",
