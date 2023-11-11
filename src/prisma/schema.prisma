@@ -7,8 +7,8 @@ generator client {
 
 datasource db {
   provider          = "postgresql"
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = "postgres://qznqvuiegkqwvi:5f9841fc1fd37f593511739596c3895c57644f0f980251f5af3b5e13d82adac1@ec2-107-21-67-46.compute-1.amazonaws.com:5432/d28jp0th14t4pf"
+  url               = "postgres://qznqvuiegkqwvi:5f9841fc1fd37f593511739596c3895c57644f0f980251f5af3b5e13d82adac1@ec2-107-21-67-46.compute-1.amazonaws.com:5432/d28jp0th14t4pf"
 }
 
 enum roles {

@@ -182,7 +182,7 @@ export const UserMutation = extendType({
                                     <td style=" width: 100%; font-family: Poppins; text-align: center;">
                         
                                         <a style="text-align: center; background-color: rgb(0, 162, 255); text-align: center; text-decoration: none; color: #fff;  padding: 10px 20px;"
-                                            href="http://localhost:3000/verify/confirmed">Click this</a>
+                                            href="https://leonardophysiotherapy.com/verify/confirmed">Click this</a>
                                     </td>
                                 </tr>
                                 <tr style="height: 60px;">
