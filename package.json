@@ -14,7 +14,7 @@
    },
    "scripts": {
       "postinstall": "npx prisma generate --schema=./src/prisma/schema.prisma",
-      "start": "npm cache clean --force && npm i && ts-node src/server.ts"
+      "start": "npm rm node_modules && npm i  && ts-node src/server.ts"
    },
    "keywords": [],
    "author": "",
