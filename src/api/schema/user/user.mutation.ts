@@ -132,6 +132,14 @@ export const UserMutation = extendType({
                 if (!pattern.test(email)) throw new GraphQLError("Please enter your GMAIL Address")
 
                 if (PhoneCheck(phone)) {
+
+                    const checkEmail = await prisma.user.findUnique({
+                        where: {
+                            email
+                        }
+                    })
+
+                    if (checkEmail.email) throw new GraphQLError("Email already used");
                     await SendEmail(email, 'Account Verification', `<html lang="en">
 
                     <head>
@@ -185,16 +193,6 @@ export const UserMutation = extendType({
                         </body>
                     
                     </html>`)
-
-
-                    const checkEmail = await prisma.user.findUnique({
-                        where: {
-                            email
-                        }
-                    })
-
-                    if (checkEmail.email === email) throw new GraphQLError("Email already used");
-
                     return await prisma.user.create({
                         data: {
                             email, password: pass,
