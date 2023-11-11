@@ -14,7 +14,7 @@ import GraphQLUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
 import cookieParser from 'cookie-parser';
 import { WebSocketServer } from 'ws';
 
-const { makeSchema, fieldAuthorizePlugin, declarativeWrappingPlugin } = Nexus
+const { makeSchema, declarativeWrappingPlugin } = Nexus
 
 const { json } = bodyParser
 
@@ -45,7 +45,7 @@ import * as Service from './api/schema/services/service.js'
             schema: join(process.cwd(), "/src/api/generated/schema.graphql"),
             typegen: join(process.cwd(), "/src/api/generated/schema.ts")
         },
-        plugins: [ fieldAuthorizePlugin(), declarativeWrappingPlugin() ],
+        plugins: [ declarativeWrappingPlugin() ],
 
     })
 
