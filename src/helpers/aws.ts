@@ -1,5 +1,5 @@
 import { Upload } from '@aws-sdk/lib-storage';
-import pkg from '@aws-sdk/client-s3/dist-es/S3Client.js'
+import pkg from '@aws-sdk/client-s3'
 
 const { S3Client } = pkg
 const client = new S3Client({
