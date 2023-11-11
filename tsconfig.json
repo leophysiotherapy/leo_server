@@ -27,6 +27,7 @@
             "esModuleInterop": true,
             "moduleResolution": "NodeNext",
             "lib": [
+                "ES6",
                 "DOM",
                 "ESNext"
             ]
