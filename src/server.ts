@@ -81,7 +81,7 @@ import * as Service from './api/schema/services/service.js'
 
     app.use("/graphql", cors<cors.CorsRequest>({
         credentials: true,
-        origin: [ "https://studio.apollographql.com", "http://localhost:3000", "https://leonardophysiotherapy.com" ]
+        origin: [ "https://www.leonardophysiotherapy.com", "https://studio.apollographql.com", "http://localhost:3000" ]
     }), json(), expressMiddleware(server, {
         context: async ({ req, res }) => ({ req, res })
     }))
