@@ -13,8 +13,9 @@
       }
    },
    "scripts": {
+      "build": "rimraf dist && npx tsc",
       "postinstall": "npx prisma generate --schema=./src/prisma/schema.prisma",
-      "start": "npm rm node_modules && npm i  && ts-node src/server.ts"
+      "start": "ts-node src/server.ts"
    },
    "keywords": [],
    "author": "",

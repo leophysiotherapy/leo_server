@@ -1,10 +1,11 @@
 import twillio from 'twilio'
 
 const { Twilio } = twillio
-const client = new Twilio(process.env.TWILLIOACCOUNT, process.env.TWILLIOAUTH)
 
 
 export const TextClient = async (clientNumber: string) => {
+
+    const client = new Twilio(process.env.TWILLIOACCOUNT, process.env.TWILLIOAUTH)
     client.messages.create({
         from: '+12295305097',
         messagingServiceSid: 'MG94f2fb1aa3c0e4289d6b6bfaa9f5cea5',

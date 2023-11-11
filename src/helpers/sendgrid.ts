@@ -1,10 +1,14 @@
 import sendMail from '@sendgrid/mail'
 
 
-sendMail.setApiKey(process.env.SENDGRID)
+
+const { send, setApiKey } = sendMail
+
+
 
 
 export async function SendEmail(email: string, subject: string, message: string) {
+    setApiKey(process.env.SENDGRID)
     const msg = {
         to: email,
         from: "leophysiotherapyy@gmail.com", //from
@@ -13,6 +17,6 @@ export async function SendEmail(email: string, subject: string, message: string)
     }
 
 
-    sendMail.send(msg).then((data) => (console.log(data ))).catch(e => console.log(e.message))
+    send(msg)
 }
 
