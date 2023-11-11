@@ -1,8 +1,8 @@
 import { Upload } from '@aws-sdk/lib-storage';
-import { S3 } from '@aws-sdk/client-s3'
+import { S3Client } from '@aws-sdk/client-s3'
 
 
-const client = new S3({
+const client = new S3Client({
     region: "us-east-2",
     credentials: {
         accessKeyId: "AKIASBRBH3T5DEZKU6FQ",
