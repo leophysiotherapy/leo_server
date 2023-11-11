@@ -1,5 +1,5 @@
 import { Upload } from '@aws-sdk/lib-storage';
-import { S3Client } from '@aws-sdk/client-s3'
+import { S3Client } from '@aws-sdk/client-s3/dist-es/S3Client.js'
 
 
 const client = new S3Client({
