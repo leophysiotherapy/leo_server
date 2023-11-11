@@ -5,8 +5,8 @@ import { S3 } from '@aws-sdk/client-s3'
 const client = new S3({
     region: process.env.REGION,
     credentials: {
-        accessKeyId: process.env.ACCESSKEY as any,
-        secretAccessKey: process.env.SECRETKEY as any
+        accessKeyId: process.env.ACCESSKEY,
+        secretAccessKey: process.env.SECRETKEY
     }
 });
 
