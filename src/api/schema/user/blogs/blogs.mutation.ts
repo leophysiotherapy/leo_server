@@ -40,16 +40,32 @@ export const BlogMutation = extendType({
         t.field("updateBlogsPost", {
             type: "blog",
             args: { blogsID: nonNull(idArg()), blog: "blogInput" },
-            resolve: async (_, { blogsID, blog: { title, content, expertise} }): Promise<any> => {
-                return await prisma.blogs.update({
-                    data: {
-                        title, content, expertise,
-                        updatedAt: new Date(Date.now())
-                    },
-                    where: {
-                        blogsID
-                    }
-                })
+            resolve: async (_, { blogsID, blog: { title, content, expertise, file } }): Promise<any> => {
+
+
+                if (!file) {
+                    return await prisma.blogs.update({
+                        data: {
+                            title, content, expertise,
+                            updatedAt: new Date(Date.now())
+                        },
+                        where: {
+                            blogsID
+                        }
+                    })
+                } else {
+                    const { createReadStream, filename } = await file;
+                    return await prisma.blogs.update({
+                        data: {
+                            title, content, expertise,
+                            image: await ImageUpload(filename, createReadStream),
+                            updatedAt: new Date(Date.now())
+                        },
+                        where: {
+                            blogsID
+                        }
+                    })
+                }
             }
         })
         t.field("deleteBlogPost", {

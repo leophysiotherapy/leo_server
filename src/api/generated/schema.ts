@@ -819,7 +819,7 @@ export interface NexusGenArgTypes {
       faqsID: string; // ID!
     }
     updateOlPatient: { // args
-      date: string; // String!
+      date?: string | null; // String
       diagnosis: string; // String!
       platform?: NexusGenEnums['platform'] | null; // platform
       prescription: string; // String!
