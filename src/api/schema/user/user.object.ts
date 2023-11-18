@@ -34,7 +34,7 @@ export const UserObject = objectType({
                         }
                     },
                     orderBy: {
-                        createdAt: "desc"
+                        createdAt: "asc"
                     }
                 })
             }
@@ -55,6 +55,9 @@ export const UserObject = objectType({
                 return await prisma.presciption.findMany({
                     where: {
                         userID
+                    },
+                    orderBy: {
+                        createdAt: "desc"
                     }
                 })
             }

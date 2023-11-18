@@ -8,7 +8,11 @@ export const FeedbackQuery = extendType({
         t.list.field("getAllFeedback", {
             type: "feedback",
             resolve: async (): Promise<any> => {
-                return await prisma.feedback.findMany()
+                return await prisma.feedback.findMany({
+                    orderBy: {
+                        creatdAt: "desc"
+                    }
+                })
             }
         })
 

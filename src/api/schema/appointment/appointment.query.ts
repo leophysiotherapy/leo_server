@@ -17,10 +17,13 @@ export const appointmentQuery = extendType({
             resolve: async (): Promise<any> => {
                 return await prisma.appointment.findMany({
                     where: {
-                        date: new Date(format(new Date(), "yyyy-MM-dd"))
+                        date: new Date(format(new Date(), "yyyy-MM-dd")),
+                        NOT: {
+                            status: "finished"
+                        }
                     },
                     orderBy: {
-                        time: "desc"
+                        time: "desc",
                     }
                 })
             }
@@ -44,6 +47,9 @@ export const appointmentQuery = extendType({
                 return await prisma.appointment.findMany({
                     where: {
                         platform
+                    },
+                    orderBy: {
+                        createdAt: "desc"
                     }
                 })
             }
@@ -66,6 +72,9 @@ export const appointmentQuery = extendType({
                 return await prisma.appointment.findMany({
                     where: {
                         platform
+                    },
+                    orderBy: {
+                        createdAt: "desc"
                     }
                 })
             }

@@ -323,97 +323,76 @@ export const UserMutation = extendType({
                         userID
                     }
                 })
-                if (!time || !date || !platform || !prescription || !diagnosis) {
-                    return await prisma.user.update({
-                        data: {
-                            email,
-                            profile: {
-                                update: {
-                                    firstname, lastname, phone,
-                                }
 
-                            },
-                            prescription: {
-                                upsert: {
-                                    create: {
-                                        prescription
-                                    },
-                                    update: {
-                                        prescription
-                                    },
-                                    where: {
-                                        prescriptionID: userPrescriptions[ 0 ].prescriptionID
-                                    }
-                                }
-                            },
-                            diagnosis: {
-                                upsert: {
-                                    create: {
-                                        diagnosis
-                                    },
-                                    update: {
-                                        diagnosis
-                                    },
-                                    where: {
-                                        diagnosisID: userDiagnosis[ 0 ].diagnosisID
-                                    }
-                                }
+                const userAppointment = await prisma.appointment.findMany({
+                    where: {
+                        user: {
+                            some: {
+                                userID
+                            }
+                        }
+                    }
+                })
+
+                return await prisma.user.update({
+                    data: {
+                        email,
+                        profile: {
+                            update: {
+                                firstname, lastname, phone,
                             }
                         },
-                        where: {
-                            userID
-                        }
-                    })
-                }
-                else {
-                    return await prisma.user.update({
-                        data: {
-                            email,
-                            profile: {
-                                update: {
-                                    firstname, lastname, phone,
-                                }
-                            },
-                            appointment: {
+                        appointment: {
+                            upsert: {
                                 create: {
                                     amount: 175,
-                                    date,
-                                    platform,
-                                    time
+                                    date: new Date(date),
+                                    time,
+                                    platform
+                                },
+                                update: {
+                                    amount: 175,
+                                    date: new Date(date),
+                                    time,
+                                    platform
+                                },
+                                where: {
+                                    appointmentID: userAppointment[ 0 ].appointmentID
                                 }
                             },
-                            prescription: {
-                                upsert: {
-                                    create: {
-                                        prescription
-                                    },
-                                    update: {
-                                        prescription
-                                    },
-                                    where: {
-                                        prescriptionID: userPrescriptions[ 0 ].prescriptionID
-                                    }
-                                }
-                            },
-                            diagnosis: {
-                                upsert: {
-                                    create: {
-                                        diagnosis
-                                    },
-                                    update: {
-                                        diagnosis
-                                    },
-                                    where: {
-                                        diagnosisID: userDiagnosis[ 0 ].diagnosisID
-                                    }
+                        },
+                        prescription: {
+                            upsert: {
+                                create: {
+                                    prescription
+                                },
+                                update: {
+                                    prescription
+                                },
+                                where: {
+                                    prescriptionID: userPrescriptions[ 0 ].prescriptionID
                                 }
                             }
                         },
-                        where: {
-                            userID
+                        diagnosis: {
+                            upsert: {
+                                create: {
+                                    diagnosis
+                                },
+                                update: {
+                                    diagnosis
+                                },
+                                where: {
+                                    diagnosisID: userDiagnosis[ 0 ].diagnosisID
+                                }
+                            }
                         }
-                    })
-                }
+                    },
+                    where: {
+                        userID
+                    }
+                })
+
             }
         })
 

@@ -9,7 +9,11 @@ export const PrescriptionQuery = extendType({
         t.list.field("getAllPrescription", {
             type: "prescription",
             resolve: async (): Promise<any> => {
-                return await prisma.presciption.findMany()
+                return await prisma.presciption.findMany({
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                })
             }
         })
         t.list.field("getPrescriptionsById", {
