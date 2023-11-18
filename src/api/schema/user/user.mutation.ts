@@ -273,8 +273,8 @@ export const UserMutation = extendType({
         })
         t.field("createOldPatient", {
             type: "user",
-            args: { user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()), time: stringArg(), date: nonNull(stringArg()), platform: "platform" },
-            resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, prescription, time, date, platform }): Promise<any> => {
+            args: { user: "userInput", diagnosis: nonNull(stringArg()), time: stringArg(), date: nonNull(stringArg()), platform: "platform" },
+            resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, time, date, platform }): Promise<any> => {
                 return await prisma.user.create({
                     data: {
                         email,
@@ -298,25 +298,15 @@ export const UserMutation = extendType({
                                 diagnosis
                             }
                         },
-                        prescription: {
-                            create: {
-                                prescription
-                            }
-                        }
                     }
                 })
             }
         })
         t.field("updateOlPatient", {
             type: "user",
-            args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()), prescription: nonNull(stringArg()), time: stringArg(), date: stringArg(), platform: "platform" },
-            resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis, prescription, time, date, platform }): Promise<any> => {
+            args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()) },
+            resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis }): Promise<any> => {
 
-                const userPrescriptions = await prisma.presciption.findMany({
-                    where: {
-                        userID
-                    }
-                })
 
                 const userDiagnosis = await prisma.diagnosis.findMany({
                     where: {
@@ -324,15 +314,6 @@ export const UserMutation = extendType({
                     }
                 })
 
-                const userAppointment = await prisma.appointment.findMany({
-                    where: {
-                        user: {
-                            some: {
-                                userID
-                            }
-                        }
-                    }
-                })
 
                 return await prisma.user.update({
                     data: {
@@ -340,38 +321,6 @@ export const UserMutation = extendType({
                         profile: {
                             update: {
                                 firstname, lastname, phone,
-                            }
-                        },
-                        appointment: {
-                            upsert: {
-                                create: {
-                                    amount: 175,
-                                    date: new Date(date),
-                                    time,
-                                    platform
-                                },
-                                update: {
-                                    amount: 175,
-                                    date: new Date(date),
-                                    time,
-                                    platform
-                                },
-                                where: {
-                                    appointmentID: userAppointment[ 0 ].appointmentID
-                                }
-                            },
-                        },
-                        prescription: {
-                            upsert: {
-                                create: {
-                                    prescription
-                                },
-                                update: {
-                                    prescription
-                                },
-                                where: {
-                                    prescriptionID: userPrescriptions[ 0 ].prescriptionID
-                                }
                             }
                         },
                         diagnosis: {

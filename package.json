@@ -15,7 +15,8 @@
    "scripts": {
       "build": "rimraf dist && npx tsc",
       "postinstall": "npx prisma generate --schema=./src/prisma/schema.prisma",
-      "start": "ts-node src/server.ts"
+      "start": "ts-node src/server.ts",
+      "dev": "nodemon"
    },
    "keywords": [],
    "author": "",

@@ -715,7 +715,6 @@ export interface NexusGenArgTypes {
       date: string; // String!
       diagnosis: string; // String!
       platform?: NexusGenEnums['platform'] | null; // platform
-      prescription: string; // String!
       time?: string | null; // String
       user?: NexusGenInputs['userInput'] | null; // userInput
     }
@@ -819,11 +818,7 @@ export interface NexusGenArgTypes {
       faqsID: string; // ID!
     }
     updateOlPatient: { // args
-      date?: string | null; // String
       diagnosis: string; // String!
-      platform?: NexusGenEnums['platform'] | null; // platform
-      prescription: string; // String!
-      time?: string | null; // String
       user?: NexusGenInputs['userInput'] | null; // userInput
       userID: string; // ID!
     }
