@@ -1,8 +1,6 @@
 import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
-import { startOfMonth, subMonths, startOfQuarter, subQuarters, startOfYear, subYears, format } from 'date-fns'
-
-
+import { format } from 'date-fns'
 export const appointmentQuery = extendType({
     type: "Query",
     definition(t) {
@@ -23,7 +21,7 @@ export const appointmentQuery = extendType({
                         }
                     },
                     orderBy: {
-                        time: "desc",
+                        createdAt: "desc",
                     }
                 })
             }
@@ -159,7 +157,9 @@ export const appointmentQuery = extendType({
                             }
                         }
                     },
-
+                    orderBy: {
+                        createdAt: "desc"
+                    }
                 })
             }
         })
