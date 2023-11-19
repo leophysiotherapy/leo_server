@@ -47,7 +47,7 @@ export const appointmentQuery = extendType({
                         platform
                     },
                     orderBy: {
-                        createdAt: "asc"
+                        createdAt: "desc"
                     }
                 })
             }
