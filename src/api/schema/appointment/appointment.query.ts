@@ -1,6 +1,10 @@
 import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
 import { format } from 'date-fns'
+import { utcToZonedTime } from "date-fns-tz";
+
+const zonedTime = utcToZonedTime(new Date(Date.now()), "America/Los_Angeles")
+
 export const appointmentQuery = extendType({
     type: "Query",
     definition(t) {
@@ -15,7 +19,7 @@ export const appointmentQuery = extendType({
             resolve: async (): Promise<any> => {
                 return await prisma.appointment.findMany({
                     where: {
-                        date: new Date(format(new Date(), "yyyy-MM-dd")),
+                        date: new Date(format(zonedTime, "yyyy-MM-dd")),
                         NOT: {
                             status: "finished"
                         }
