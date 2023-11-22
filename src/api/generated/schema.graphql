@@ -32,7 +32,6 @@ type Mutation {
   createAdminAccount(user: userInput): user
   createAppointment(appointment: appointmentInput, end: String!, platform: platform, userID: ID!): appointment
   createBlogPost(blog: blogInput, userID: ID!): blog
-  createEmailNotification(email: EmailAddress!): Boolean
   createEquipment(equipment: equipmentInput, inventory: inventory, userID: ID!): equipment
   createFAQs(faqs: faqsInput!, userID: ID!): faqs
   createFeedback(feedback: String!, rating: Int!, userID: ID!): feedback
@@ -43,7 +42,6 @@ type Mutation {
   createPatientDiagnosis(diagnosis: ID!, userID: ID!): diagnosis
   createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
   createProfileAvatar(avatar: String!, profileID: ID!): avatar
-  createSMSNotification(phoneNumber: PhoneNumber!): Boolean
   createServices(descriptions: String!, file: Upload, services: String!): services
   createStaffAccount(file: Upload, user: userInput): user
   deleteAppointment(appointmentID: ID!): appointment
