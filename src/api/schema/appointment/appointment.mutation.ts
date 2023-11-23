@@ -4,6 +4,7 @@ import { googleCalendar } from "../../../helpers/calendar.js";
 import { EmailReminder, SendEmail } from "../../../helpers/sendgrid.js";
 import { TextClient } from "../../../helpers/twillio.js";
 import { parseISO, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 export const statusEnum = enumType({
     name: "status",
     members: [ "upcoming", "done", "finished", "canceled" ]
@@ -49,13 +50,12 @@ export const appointmentMutation = extendType({
 
                     const targetTimeString = `${dateFormated}T08:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
-                    TextClient(findUserID.profile.phone, formattedTime)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
+
                     const dateTargetString = `${dateFormated}T08:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
-
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
 
                     <head>
@@ -98,7 +98,7 @@ export const appointmentMutation = extendType({
                     </body>
 
                     </html>` , dateSecondsFormatted)
-
+                    TextClient(findUserID.profile.phone, formattedTime)
                     return await prisma.appointment.create({
                         data: {
                             date, time,
@@ -113,15 +113,16 @@ export const appointmentMutation = extendType({
                             }
                         }
                     })
-                } else if (time === "10:00 AM") {
+                } 
+                else if (time === "10:00 AM") {
                     await googleCalendar(date, "02:00", "03:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T09:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
 
                     const dateTargetString = `${dateFormated}T09:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -185,12 +186,12 @@ export const appointmentMutation = extendType({
                     await googleCalendar(date, "03:00", "04:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T10:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
 
 
                     const dateTargetString = `${dateFormated}T10:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -255,10 +256,10 @@ export const appointmentMutation = extendType({
                     await googleCalendar(date, "05:00", "12:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T12:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateTargetString = `${dateFormated}T12:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -322,10 +323,10 @@ export const appointmentMutation = extendType({
                     await googleCalendar(date, "06:00", "07:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T13:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateTargetString = `${dateFormated}T13:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -389,10 +390,10 @@ export const appointmentMutation = extendType({
                     await googleCalendar(date, "07:00", "08:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T14:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateTargetString = `${dateFormated}T14:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -457,10 +458,10 @@ export const appointmentMutation = extendType({
                     await googleCalendar(date, "08:00", "09:00", findUserID.email)
                     const targetTimeString = `${dateFormated}T15:00:00`;
                     const targetTimeParse = parseISO(targetTimeString)
-                    const formattedTime = format(targetTimeParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const formattedTime = format(utcToZonedTime(targetTimeParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateTargetString = `${dateFormated}T15:50:00`
                     const dateTargetParse = parseISO(dateTargetString)
-                    const dateFormatedTime = format(dateTargetParse, `yyyy-MM-dd'T'HH:mm:ss`)
+                    const dateFormatedTime = format(utcToZonedTime(dateTargetParse, "America/Los_Angeles"), `yyyy-MM-dd'T'HH:mm:ss`)
                     const dateSecondsFormatted = new Date(dateFormatedTime).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
