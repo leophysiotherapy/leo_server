@@ -5,12 +5,16 @@ const client = new Twilio(process.env.TWILLIOACCOUNT, process.env.TWILLIOAUTH)
 
 export const TextClient = async (clientNumber: string, date: string) => {
 
-    await client.messages.create({
-        from: '+12295305097',
-        messagingServiceSid: 'MG94f2fb1aa3c0e4289d6b6bfaa9f5cea5',
-        to: clientNumber,
-        scheduleType: "fixed",
-        sendAt: new Date(date),
-        body: `Good day! You have an appointment with Leonardo's Physical Therapy Rehabilitation Clinic in just over an hour. We are anticipating seeing you!`
-    })
+    try {
+        await client.messages.create({
+            from: '+12295305097',
+            messagingServiceSid: 'MG94f2fb1aa3c0e4289d6b6bfaa9f5cea5',
+            to: clientNumber,
+            scheduleType: "fixed",
+            sendAt: new Date(date),
+            body: `Good day! You have an appointment with Leonardo's Physical Therapy Rehabilitation Clinic in just over an hour. We are anticipating seeing you!`
+        })
+    } catch (e) {
+        console.log(e.message)
+    }
 }
