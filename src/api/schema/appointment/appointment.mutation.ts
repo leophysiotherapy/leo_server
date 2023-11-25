@@ -254,7 +254,7 @@ export const appointmentMutation = extendType({
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <link href="/index.css" rel="stylesheet" />
-                    
+
                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
                         <table style="width: 500px; border: 1px solid #ccc">
                             <tr style="height: 60px;">
@@ -281,14 +281,14 @@ export const appointmentMutation = extendType({
                                     Best regards,
                                 </td>
                             </tr>
-                    
+
                             <tr style="height: 0;">
-                    
+
                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
                             </tr>
                         </table>
                     </body>
-                    
+
                     </html>` , dateSecondsFormatted)
                     return await prisma.appointment.create({
                         data: {
@@ -316,7 +316,7 @@ export const appointmentMutation = extendType({
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <link href="/index.css" rel="stylesheet" />
-                    
+
                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
                         <table style="width: 500px; border: 1px solid #ccc">
                             <tr style="height: 60px;">
@@ -343,14 +343,14 @@ export const appointmentMutation = extendType({
                                     Best regards,
                                 </td>
                             </tr>
-                    
+
                             <tr style="height: 0;">
-                    
+
                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
                             </tr>
                         </table>
                     </body>
-                    
+
                     </html>` , dateSecondsFormatted)
 
                     return await prisma.appointment.create({
@@ -379,7 +379,7 @@ export const appointmentMutation = extendType({
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <link href="/index.css" rel="stylesheet" />
-                    
+
                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
                         <table style="width: 500px; border: 1px solid #ccc">
                             <tr style="height: 60px;">
@@ -406,14 +406,14 @@ export const appointmentMutation = extendType({
                                     Best regards,
                                 </td>
                             </tr>
-                    
+
                             <tr style="height: 0;">
-                    
+
                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
                             </tr>
                         </table>
                     </body>
-                    
+
                     </html>` , dateSecondsFormatted)
 
 
@@ -442,7 +442,7 @@ export const appointmentMutation = extendType({
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <link href="/index.css" rel="stylesheet" />
-                    
+
                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
                         <table style="width: 500px; border: 1px solid #ccc">
                             <tr style="height: 60px;">
@@ -469,14 +469,14 @@ export const appointmentMutation = extendType({
                                     Best regards,
                                 </td>
                             </tr>
-                    
+
                             <tr style="height: 0;">
-                    
+
                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
                             </tr>
                         </table>
                     </body>
-                    
+
                     </html>` , dateSecondsFormatted)
 
                     return await prisma.appointment.create({
@@ -576,10 +576,7 @@ export const appointmentMutation = extendType({
                             </td>
                         </tr>
                         <tr style="height: 60px;">
-                            <td style="font-family: Poppins;"> We regret to inform you that the upcoming consultation with
-                                Dr.Leonardo
-                                needs to be rescheduled due to ${reason}.Kindly suggest your availability by booking a
-                                new appointment through our website.
+                            <td style="font-family: Poppins;"> We regret to inform you that the upcoming consultation with Dr. Leonardo needs to be rescheduled due to ${reason}.Kindly access your dashboard in the website to see the newly set schedule of your appointment.
                             </td>
                         </tr>
                         <tr style="height: 60px;">

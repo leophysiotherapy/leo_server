@@ -170,7 +170,7 @@ export interface NexusGenObjects {
   }
   appointmentChart: { // root type
     _all?: number | null; // Int
-    createdAt?: NexusGenScalars['Date'] | null; // Date
+    createdAt?: string | null; // String
   }
   avatar: { // root type
     avatar?: string | null; // String
@@ -369,7 +369,7 @@ export interface NexusGenFieldTypes {
   }
   appointmentChart: { // field return type
     _all: number | null; // Int
-    createdAt: NexusGenScalars['Date'] | null; // Date
+    createdAt: string | null; // String
   }
   avatar: { // field return type
     avatar: string | null; // String
@@ -569,7 +569,7 @@ export interface NexusGenFieldTypeNames {
   }
   appointmentChart: { // field return type name
     _all: 'Int'
-    createdAt: 'Date'
+    createdAt: 'String'
   }
   avatar: { // field return type name
     avatar: 'String'

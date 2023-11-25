@@ -1,9 +1,11 @@
 import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
-import { format } from 'date-fns'
+import { format, subDays, subMonths } from 'date-fns'
 import { utcToZonedTime } from "date-fns-tz";
-
+// import { sta}
 const zonedTime = utcToZonedTime(new Date(Date.now()), "America/Los_Angeles")
+
+
 
 export const appointmentQuery = extendType({
     type: "Query",
@@ -87,60 +89,71 @@ export const appointmentQuery = extendType({
             resolve: async (_, { dateFilter, platform }): Promise<any> => {
                 switch (dateFilter) {
                     case "Monthly":
-                        const appointment = await prisma.$queryRawUnsafe(`SELECT 
-                        DATE_TRUNC('month', public.appointment."createdAt") AS month,
-                        CAST(COUNT(*) AS INT) AS AppointmentCount
-                    FROM appointment
-                    WHERE platform = '${platform}'
-                    GROUP BY  month
-                    ORDER BY  month;`) as any
+                        const appointment = await prisma.$queryRawUnsafe(`SELECT
+                        EXTRACT(MONTH FROM "date") AS period,
+                        COUNT(*) record_count
+                    FROM
+                        appointment WHERE "platform" = '${platform}'
+                    GROUP BY
+                        EXTRACT(MONTH FROM "date")
+                    ORDER BY
+                        period;
+                    `) as any
 
-                        return appointment.map(({ month, appointmentcount }) => {
-                            return { _all: appointmentcount, createdAt: month }
-
+                        return appointment.map(({ period, record_count }) => {
+                            return { createdAt: period, _all: parseInt(record_count) }
                         })
 
                     case "Quarterly":
-                        const appointmentQuerterly = await prisma.$queryRawUnsafe(`SELECT 
-                        DATE_TRUNC('quarter', public.appointment."createdAt") AS quarterly,
-                        CAST(COUNT(*) AS INT) AS AppointmentCount
-                    FROM appointment
-                    WHERE platform = '${platform}'
-                    GROUP BY  quarterly
-                    ORDER BY  quarterly;`) as any
+                        const appointmentQuerterly = await prisma.$queryRawUnsafe(`SELECT
+                        EXTRACT(QUARTER FROM "date") AS period,
+                        COUNT(*) AS record_count
+                    FROM
+                    appointment WHERE "platform" = '${platform}'
+                    GROUP BY
+                        EXTRACT(QUARTER FROM "date")
+                    ORDER BY
+                        period;
+                        `) as any
 
-                        return appointmentQuerterly.map(({ quarterly, appointmentcount }) => {
-                            return { _all: appointmentcount, createdAt: quarterly }
+                        return appointmentQuerterly.map(({ period, record_count }) => {
+                            return { _all: parseInt(record_count), createdAt: period }
 
                         })
                     case "SemiAnnually":
-                        const appointmentSemiAnnualy = await prisma.$queryRawUnsafe(`SELECT 
-                        DATE_PART('year', public.appointment."createdAt") AS Year,
-                        CASE 
-                            WHEN DATE_PART('month', public.appointment."createdAt") <= 6 THEN 1
-                            ELSE 2
-                        END AS SemiAnnual,
-                        CAST(COUNT(*) AS INT) AS AppointmentCount
-                    FROM appointment
-                    WHERE platform = '${platform}'
-                    GROUP BY Year, SemiAnnual
-                    ORDER BY Year, SemiAnnual;`) as any
+                        const appointmentSemiAnnualy = await prisma.$queryRawUnsafe(`SELECT
+                        CASE
+                            WHEN EXTRACT(MONTH FROM "date") <= 6 THEN 'S1'
+                            ELSE 'S2'
+                        END AS period,
+                        COUNT(*) AS record_count
+                    FROM
+                        appointment WHERE "platform" = '${platform}'
+                    GROUP BY
+                        CASE
+                            WHEN EXTRACT(MONTH FROM "date") <= 6 THEN 'S1'
+                            ELSE 'S2'
+                        END
+                    ORDER BY
+                        period;`) as any
 
-                        return appointmentSemiAnnualy.map(({ year, appointmentcount }) => {
-                            return { _all: appointmentcount, createdAt: format(new Date(`${year}-01-01`), "yyyy-MM-dd") }
+                        return appointmentSemiAnnualy.map(({ record_count, period }) => {
+                            return { _all: parseInt(record_count), createdAt: period }
 
                         })
                     case "Annually":
-                        const appointmentYear = await prisma.$queryRawUnsafe(`SELECT 
-                        DATE_TRUNC('year', public.appointment."createdAt") AS year,
-                        CAST(COUNT(*) AS INT) AS AppointmentCount
-                    FROM appointment
-                    WHERE platform = '${platform}'
-                    GROUP BY  year
-                    ORDER BY  year;`) as any
+                        const appointmentYear = await prisma.$queryRawUnsafe(`SELECT
+                        EXTRACT(YEAR FROM "date") AS period,
+                        COUNT(*) AS record_count
+                    FROM
+                        appointment WHERE "platform" = '${platform}'
+                    GROUP BY
+                        EXTRACT(YEAR FROM "date")
+                    ORDER BY
+                        period;`) as any
 
-                        return appointmentYear.map(({ year, appointmentcount }) => {
-                            return { _all: appointmentcount, createdAt: year }
+                        return appointmentYear.map(({ record_count, period }) => {
+                            return { _all: parseInt(record_count), createdAt: period }
 
                         })
 

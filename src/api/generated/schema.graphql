@@ -155,7 +155,7 @@ type appointment {
 
 type appointmentChart {
   _all: Int
-  createdAt: Date
+  createdAt: String
 }
 
 input appointmentInput {

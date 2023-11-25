@@ -36,6 +36,6 @@ export const appointmentChart = objectType({
     name: "appointmentChart",
     definition(t) {
         t.int("_all");
-        t.date("createdAt");
+        t.string("createdAt");
     }
 })
