@@ -24,7 +24,7 @@ export async function EmailReminder(email: string, subject: string, message: str
     try {
         sendMail.send({
             to: email,
-            from: 'leophysiotherappy@gmail.com',
+            from: 'leophysiotherapyy@gmail.com',
             subject,
             html: message,
             sendAt: date
