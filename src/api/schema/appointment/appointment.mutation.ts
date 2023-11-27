@@ -46,51 +46,50 @@ export const appointmentMutation = extendType({
                 if (time === "09:00 AM") {
 
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T08:00:00`)
-                    console.log(`${dateFormated}T08:00:00`)
-                    const dateTargetString = `${dateFormated}T08:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T00:00:00`)
+                    const dateTargetString = `${dateFormated}T00:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
 
-                    // <head>
-                    //     <meta charset="UTF-8">
-                    //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    //     <link href="/index.css" rel="stylesheet" />
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                         <link href="/index.css" rel="stylesheet" />
 
-                    // <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
-                    //     <table style="width: 500px; border: 1px solid #ccc">
-                    //         <tr style="height: 60px;">
-                    //             <td style="font-family: Poppins;">Dear Dr. Leonardo,</h2>
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 65px;">
-                    //             <td style="font-family: Poppins;">This is a friendly reminder that you have an upcoming appointment
-                    //                 scheduled later in the next 10 minutes. Your patient is eagerly anticipating their visit with you.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 65px;">
-                    //             <td style="font-family: Poppins;">We kindly request that you prepare for the session and ensure that you're
-                    //                 ready to attend to your patient at the scheduled time.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 60px;">
-                    //             <td style="font-family: Poppins;">Thank you for your commitment to providing exceptional care to your
-                    //                 patients.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style=" height: 40px;">
-                    //             <td style="font-family: Poppins;">
-                    //                 Best regards,
-                    //             </td>
-                    //         </tr>
+                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                         <table style="width: 500px; border: 1px solid #ccc">
+                             <tr style="height: 60px;">
+                                 <td style="font-family: Poppins;">Dear Dr. Leonardo,</h2>
+                                 </td>
+                             </tr>
+                             <tr style="height: 65px;">
+                                 <td style="font-family: Poppins;">This is a friendly reminder that you have an upcoming appointment
+                                     scheduled later in the next 10 minutes. Your patient is eagerly anticipating their visit with you.
+                                 </td>
+                             </tr>
+                             <tr style="height: 65px;">
+                                 <td style="font-family: Poppins;">We kindly request that you prepare for the session and ensure that you're
+                                     ready to attend to your patient at the scheduled time.
+                                 </td>
+                             </tr>
+                             <tr style="height: 60px;">
+                                 <td style="font-family: Poppins;">Thank you for your commitment to providing exceptional care to your
+                                     patients.
+                                 </td>
+                             </tr>
+                             <tr style=" height: 40px;">
+                                 <td style="font-family: Poppins;">
+                                     Best regards,
+                                 </td>
+                             </tr>
 
-                    //         <tr style="height: 0;">
+                             <tr style="height: 0;">
 
-                    //             <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
-                    //         </tr>
-                    //     </table>
-                    // </body>
+                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
+                             </tr>
+                         </table>
+                     </body>
 
                      </html>` , dateSecondsFormatted)
 
@@ -110,51 +109,51 @@ export const appointmentMutation = extendType({
                     })
                 }
                 else if (time === "10:00 AM") {
-                    TextClient(findUserID.profile.phone, `${dateFormated}T09:00:00`)
+                    TextClient(findUserID.profile.phone, `${dateFormated}T01:00:00`)
 
-                    const dateTargetString = `${dateFormated}T09:50:00`
+                    const dateTargetString = `${dateFormated}T01:50:00`
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
 
-                    // <head>
-                    //     <meta charset="UTF-8">
-                    //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    //     <link href="/index.css" rel="stylesheet" />
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                         <link href="/index.css" rel="stylesheet" />
 
-                    // <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
-                    //     <table style="width: 500px; border: 1px solid #ccc">
-                    //         <tr style="height: 60px;">
-                    //             <td style="font-family: Poppins;">Dear Dr. Leonardo,</h2>
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 65px;">
-                    //             <td style="font-family: Poppins;">This is a friendly reminder that you have an upcoming appointment
-                    //                 scheduled later in the next 10 minutes. Your patient is eagerly anticipating their visit with you.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 65px;">
-                    //             <td style="font-family: Poppins;">We kindly request that you prepare for the session and ensure that you're
-                    //                 ready to attend to your patient at the scheduled time.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style="height: 60px;">
-                    //             <td style="font-family: Poppins;">Thank you for your commitment to providing exceptional care to your
-                    //                 patients.
-                    //             </td>
-                    //         </tr>
-                    //         <tr style=" height: 40px;">
-                    //             <td style="font-family: Poppins;">
-                    //                 Best regards,
-                    //             </td>
-                    //         </tr>
+                     <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
+                         <table style="width: 500px; border: 1px solid #ccc">
+                             <tr style="height: 60px;">
+                                 <td style="font-family: Poppins;">Dear Dr. Leonardo,</h2>
+                                 </td>
+                             </tr>
+                             <tr style="height: 65px;">
+                                 <td style="font-family: Poppins;">This is a friendly reminder that you have an upcoming appointment
+                                     scheduled later in the next 10 minutes. Your patient is eagerly anticipating their visit with you.
+                                 </td>
+                             </tr>
+                             <tr style="height: 65px;">
+                                 <td style="font-family: Poppins;">We kindly request that you prepare for the session and ensure that you're
+                                     ready to attend to your patient at the scheduled time.
+                                 </td>
+                             </tr>
+                             <tr style="height: 60px;">
+                                 <td style="font-family: Poppins;">Thank you for your commitment to providing exceptional care to your
+                                     patients.
+                                 </td>
+                             </tr>
+                             <tr style=" height: 40px;">
+                                 <td style="font-family: Poppins;">
+                                     Best regards,
+                                 </td>
+                             </tr>
 
-                    //         <tr style="height: 0;">
+                             <tr style="height: 0;">
 
-                    //             <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
-                    //         </tr>
-                    //     </table>
-                    // </body>
+                                 <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
+                             </tr>
+                         </table>
+                     </body>
 
                     </html>` , dateSecondsFormatted)
                     return await prisma.appointment.create({
@@ -174,9 +173,9 @@ export const appointmentMutation = extendType({
                 } else if (time === "11:00 AM") {
 
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T10:00:00`)
+                    TextClient(findUserID.profile.phone, `${dateFormated}T02:00:00`)
 
-                    const dateTargetString = `${dateFormated}T10:50:00`
+                    const dateTargetString = `${dateFormated}T02:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
@@ -239,9 +238,9 @@ export const appointmentMutation = extendType({
                     })
                 } else if (time === "01:00 PM") {
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T12:00:00`)
+                    TextClient(findUserID.profile.phone, `${dateFormated}T03:00:00`)
 
-                    const dateTargetString = `${dateFormated}T12:50:00`
+                    const dateTargetString = `${dateFormated}T03:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
@@ -303,8 +302,8 @@ export const appointmentMutation = extendType({
                     })
                 } else if (time === "02:00 PM") {
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T13:00:00`)
-                    const dateTargetString = `${dateFormated}T13:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T04:00:00`)
+                    const dateTargetString = `${dateFormated}T04:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -367,8 +366,8 @@ export const appointmentMutation = extendType({
                 } else if (time === "03:00 PM") {
 
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T14:00:00`)
-                    const dateSecondsFormatted = new Date(`${dateFormated}T14:50:00`).getTime() / 1000
+                    TextClient(findUserID.profile.phone, `${dateFormated}T05:00:00`)
+                    const dateSecondsFormatted = new Date(`${dateFormated}T05:50:00`).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
 
@@ -430,8 +429,8 @@ export const appointmentMutation = extendType({
                     })
                 }
                 else if (time === "04:00 PM") {
-                    TextClient(findUserID.profile.phone, `${dateFormated}T15:00:00`)
-                    const dateTargetString = `${dateFormated}T15:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T06:00:00`)
+                    const dateTargetString = `${dateFormated}T06:50:00`
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
