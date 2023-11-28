@@ -46,8 +46,8 @@ export const appointmentMutation = extendType({
                 if (time === "09:00 AM") {
 
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T06:00:00`)
-                    const dateTargetString = `${dateFormated}T06:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T08:00:00`)
+                    const dateTargetString = `${dateFormated}T08:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -109,9 +109,9 @@ export const appointmentMutation = extendType({
                     })
                 }
                 else if (time === "10:00 AM") {
-                    TextClient(findUserID.profile.phone, `${dateFormated}T07:00:00`)
+                    TextClient(findUserID.profile.phone, `${dateFormated}T08:00:00`)
 
-                    const dateTargetString = `${dateFormated}T07:50:00`
+                    const dateTargetString = `${dateFormated}T08:50:00`
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -302,8 +302,8 @@ export const appointmentMutation = extendType({
                     })
                 } else if (time === "02:00 PM") {
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T10:00:00`)
-                    const dateTargetString = `${dateFormated}T10:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T8:00:00`)
+                    const dateTargetString = `${dateFormated}T8:50:00`
 
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
@@ -366,8 +366,8 @@ export const appointmentMutation = extendType({
                 } else if (time === "03:00 PM") {
 
 
-                    TextClient(findUserID.profile.phone, `${dateFormated}T11:00:00`)
-                    const dateSecondsFormatted = new Date(`${dateFormated}T11:50:00`).getTime() / 1000
+                    TextClient(findUserID.profile.phone, `${dateFormated}T8:00:00`)
+                    const dateSecondsFormatted = new Date(`${dateFormated}T8:50:00`).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
 
@@ -429,8 +429,8 @@ export const appointmentMutation = extendType({
                     })
                 }
                 else if (time === "04:00 PM") {
-                    TextClient(findUserID.profile.phone, `${dateFormated}T12:00:00`)
-                    const dateTargetString = `${dateFormated}T12:50:00`
+                    TextClient(findUserID.profile.phone, `${dateFormated}T8:00:00`)
+                    const dateTargetString = `${dateFormated}T8:50:00`
                     const dateSecondsFormatted = new Date(dateTargetString).getTime() / 1000
 
                     EmailReminder('leonardophysiotherapy@gmail.com', 'Appointment', `<html lang="en">
