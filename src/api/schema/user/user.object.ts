@@ -34,7 +34,7 @@ export const UserObject = objectType({
                         }
                     },
                     orderBy: {
-                        createdAt: "asc"
+                        createdAt: "desc"
                     }
                 })
             }

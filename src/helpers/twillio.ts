@@ -12,7 +12,7 @@ export const TextClient = async (clientNumber: string, date: string) => {
             to: clientNumber,
             scheduleType: "fixed",
             sendAt: new Date(date),
-            body: `Good day! You have an appointment with Leonardo's Physical Therapy Rehabilitation Clinic in just over an hour. We are anticipating seeing you!`
+            body: `Good day! You have an appointment with Leonardo's Physical Therapy Rehabilitation Clinic today. Please check your account dashboard to view your appointment schedule. We are anticipating seeing you!`
         })
     } catch (e) {
         console.log(e.message)
