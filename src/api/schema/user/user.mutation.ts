@@ -23,10 +23,10 @@ export const UserInput = inputObjectType({
         t.string("password");
         t.string("firstname");
         t.string("lastname");
-        t.string("phone");
+        t.phone("phone");
         t.nullable.string("designation");
         t.nullable.string("expertise");
-        t.nullable.string("emergencyPhone");
+        t.nullable.phone("emergencyPhone");
     },
 })
 
