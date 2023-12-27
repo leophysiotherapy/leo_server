@@ -195,7 +195,6 @@ CREATE TABLE "prediag" (
     "question14" TEXT NOT NULL,
     "question15" TEXT NOT NULL,
     "question16" TEXT NOT NULL,
-    "question17" TEXT NOT NULL,
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userID" TEXT,
