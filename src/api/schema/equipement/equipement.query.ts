@@ -6,14 +6,15 @@ export const EquipmentQuery = extendType({
     definition(t) {
         t.list.field("getAllEquipment", {
             type: "equipment",
-            args: { inventories: "inventory" },
-            resolve: async (_, { inventories }): Promise<any> => {
+            args: { inventories: "inventory", orders: "sort" },
+            resolve: async (_, { inventories, orders }): Promise<any> => {
                 return await prisma.equipment.findMany({
                     where: {
                         inventory: inventories
                     },
                     orderBy: {
-                        expireDate: "asc"
+                        name: orders,
+
                     }
                 })
             }

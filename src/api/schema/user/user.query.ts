@@ -1,6 +1,11 @@
-import { extendType, idArg, intArg, nonNull, stringArg } from "nexus";
+import { extendType, idArg, intArg, nonNull, stringArg, enumType } from "nexus";
 import { prisma } from "../../../util/index.js";
 
+
+export const sortingEnum = enumType({
+    name: "sort",
+    members: [ "asc", "desc" ]
+})
 
 export const UserQuery = extendType({
     type: "Query",
@@ -13,14 +18,19 @@ export const UserQuery = extendType({
         })
         t.list.field("getPhysioUserByRole", {
             type: "user",
-            args: { role: "roles", take: nonNull(intArg()), limit: nonNull(intArg()) },
-            resolve: async (_, { role, take, limit }): Promise<any> => {
+            args: { role: "roles", take: nonNull(intArg()), limit: nonNull(intArg()), orders: nonNull("sort") },
+            resolve: async (_, { role, take, limit, orders }): Promise<any> => {
                 return await prisma.user.findMany({
                     where: {
                         role
                     },
                     take,
-                    skip: limit
+                    skip: limit,
+                    orderBy: {
+                        profile: {
+                            firstname: orders
+                        }
+                    }
                 })
             }
         })

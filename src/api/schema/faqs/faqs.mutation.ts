@@ -1,5 +1,6 @@
 import { extendType, idArg, inputObjectType, nonNull } from "nexus";
 import { prisma, pubsub } from "../../../util/index.js";
+import { GraphQLError } from "graphql";
 
 
 export const FAQsInput = inputObjectType({
@@ -18,6 +19,10 @@ export const FAQsMutation = extendType({
             type: "faqs",
             args: { faqs: nonNull("faqsInput"), userID: nonNull(idArg()) },
             resolve: async (_, { faqs: { answer, faqs }, userID }): Promise<any> => {
+
+                if (!answer) throw new GraphQLError("Answer is required")
+                if (!faqs) throw new GraphQLError("Question is required")
+
                 const faq = await prisma.faqs.create({
                     data: {
                         answer, faqs,
@@ -39,6 +44,10 @@ export const FAQsMutation = extendType({
             type: "faqs",
             args: { faqs: nonNull("faqsInput"), faqsID: nonNull(idArg()) },
             resolve: async (_, { faqs: { answer, faqs }, faqsID }): Promise<any> => {
+
+                if (!answer) throw new GraphQLError("Answer is required")
+                if (!faqs) throw new GraphQLError("Question is required")
+
                 return await prisma.faqs.update({
                     data: { answer, faqs, updateAt: new Date(Date.now()) },
                     where: { faqsID }

@@ -11,7 +11,6 @@ export default function PhoneCheck(phone: string) {
     }
 
     catch {
-        throw new GraphQLError("Phone number is not valid of the form +17895551234 (7-15 digits);")
-        return false
+        throw new GraphQLError("Please Enter a valid phone number: (country code) + (area code) + (local number) (+1xxxxxxxxxx)")
     }
 }

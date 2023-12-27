@@ -1,6 +1,7 @@
 import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../util/index.js";
 import { ImageUpload } from "../../../helpers/aws.js";
+import { GraphQLError } from "graphql";
 
 export const ServiceMutation = extendType({
     type: "Mutation",
@@ -9,6 +10,11 @@ export const ServiceMutation = extendType({
             type: "services",
             args: { file: "Upload", services: nonNull(stringArg()), descriptions: nonNull(stringArg()), },
             resolve: async (_, { descriptions, services, file }): Promise<any> => {
+
+                if (!services) throw new GraphQLError("Service name is required")
+                if (!descriptions) throw new GraphQLError("Description is required")
+
+                if (!file) throw new GraphQLError("Please insert an Image")
 
                 const { createReadStream, filename } = await file;
 
@@ -25,6 +31,10 @@ export const ServiceMutation = extendType({
             type: "services",
             args: { servicesID: nonNull(idArg()), descriptions: nonNull(stringArg()), services: nonNull(stringArg()), file: "Upload" },
             resolve: async (_, { servicesID, descriptions, services, file }): Promise<any> => {
+
+
+                if (!services) throw new GraphQLError("Service name is required")
+                if (!descriptions) throw new GraphQLError("Description is required")
 
                 if (file) {
                     const { createReadStream, filename } = await file;

@@ -11,7 +11,7 @@ export const ProfileMutation = extendType({
             type: "profile",
             args: { userID: nonNull(idArg()), phone: nonNull("PhoneNumber") },
             resolve: async (_, { userID, phone }): Promise<any> => {
-                if (!phone) throw new GraphQLError("Phone number is not valid of the form +17895551234 (7-15 digits);")
+                if (!phone) throw new GraphQLError("Please Enter a valid phone number: (country code) + (area code) + (local number) (+1xxxxxxxxxx)")
                 return prisma.profile.update({
                     data: {
                         phone

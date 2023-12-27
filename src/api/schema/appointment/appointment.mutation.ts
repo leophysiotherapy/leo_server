@@ -2,6 +2,7 @@ import { enumType, extendType, idArg, inputObjectType, nonNull, stringArg } from
 import { prisma } from "../../../util/index.js";
 import { EmailReminder, SendEmail } from "../../../helpers/sendgrid.js";
 import { TextClient } from "../../../helpers/twillio.js";
+import { GraphQLError } from "graphql";
 export const statusEnum = enumType({
     name: "status",
     members: [ "upcoming", "done", "finished", "canceled" ]
@@ -30,6 +31,9 @@ export const appointmentMutation = extendType({
             args: { appointment: "appointmentInput", platform: "platform", userID: nonNull(idArg()), end: nonNull(stringArg()) },
             resolve: async (_, { appointment: { date, time, amount, services }, platform, userID }): Promise<any> => {
 
+                if (!date) throw new GraphQLError("Date is required");
+                if (!time) throw new GraphQLError("Services is required")
+                if (!services) throw new GraphQLError("Please choose a service option before continuing.")
 
                 const findUserID = await prisma.user.findUnique({
                     where: {
@@ -42,7 +46,7 @@ export const appointmentMutation = extendType({
 
                 const dateFormated = new Date(date).toISOString().slice(0, 10)
 
-                TextClient(findUserID.profile.phone, `${dateFormated}T16:00:00`)
+                TextClient(findUserID.profile.phone, `${dateFormated}T16:00:00`, `${time}`)
 
 
 
@@ -400,6 +404,11 @@ export const appointmentMutation = extendType({
             type: "appointment",
             args: { appointmentID: nonNull(idArg()), link: stringArg(), appointment: "appointmentInput", platform: "platform", status: "status" },
             resolve: async (_, { appointmentID, link, appointment: { date, time }, platform, status }): Promise<any> => {
+
+                if (!date) throw new GraphQLError("Date is required");
+                if (!time) throw new GraphQLError("Services is required")
+
+
                 return await prisma.appointment.update({
                     data: {
                         link,
@@ -427,6 +436,11 @@ export const appointmentMutation = extendType({
             type: "appointment",
             args: { date: nonNull(stringArg()), time: nonNull(stringArg()), appointmentID: nonNull(idArg()), reason: nonNull(stringArg()) },
             resolve: async (_, { appointmentID, date, time, reason }): Promise<any> => {
+
+                if (!date) throw new GraphQLError("Date is required");
+                if (!time) throw new GraphQLError("Services is required")
+                if (!reason) throw new GraphQLError("Please choose a reason option before continuing.")
+
 
                 const findUser = await prisma.user.findMany({
                     where: {
@@ -467,10 +481,21 @@ export const appointmentMutation = extendType({
                             </td>
                         </tr>
                         <tr style="height: 60px;">
-                            <td style="font-family: Poppins;"> We regret to inform you that the upcoming consultation with Dr. Leonardo needs to be rescheduled due to ${reason}.Kindly access your dashboard in the website to see the newly set schedule of your appointment.
+                            <td style="font-family: Poppins;"> We regret to inform you that the upcoming consultation with Dr. Leonardo
+                                needs to be rescheduled due to ${reason}.
                             </td>
                         </tr>
-                        <tr style="height: 60px;">
+                        <tr style="height: 20px;">
+                            <td style="font-family: Poppins;">The new date and time for the appointment are as follows:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: Poppins;">Date: ${date} </td>
+                        </tr>
+                        <tr>
+                            <td style="font-family: Poppins;">Time: ${time} </td>
+                        </tr>
+                        <tr style="height: 70px;">
                             <td style="font-family: Poppins;"> We apologize for any inconvenience caused and appreciate your
                                 understanding.
                             </td>
@@ -535,12 +560,22 @@ export const appointmentMutation = extendType({
                 <body style=" width: 100%; box-sizing: border-box;  margin-left: auto; margin-right: auto; padding: 10px;">
                     <table style="width: 500px; border: 1px solid #ccc">
                         <tr style="height: 60px;">
-                            <td style="font-family: Poppins;"> Dear ${findUser[ 0 ].profile.firstname}, ${findUser[ 0 ].profile.lastname},</h2>
+                            <td style="font-family: Poppins;"> Dear ${findUser[ 0 ].profile.firstname}, ${findUser[ 0
+                    ].profile.lastname},</h2>
                             </td>
                         </tr>
                         <tr style="height: 60px;">
                             <td style="font-family: Poppins;">We regret to inform you that the scheduled consultation with Dr. Leonardo
                                 has been canceled due to ${reason}. We apologize for any inconvenience this may cause.
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">If you have any questions, please feel free to contact our clinic at
+                                restore.pt11@gmail.com
+                            </td>
+                        </tr>
+                        <tr style="height: 60px;">
+                            <td style="font-family: Poppins;">We Appreciate your understanding in this matter.
                             </td>
                         </tr>
                         <tr style=" height: 40px;">
@@ -554,9 +589,7 @@ export const appointmentMutation = extendType({
                             <td style="font-family: Poppins;">Leonardo Physical Theraphy Rehabilitation Clinic</td>
                         </tr>
                     </table>
-                </body>
-                
-                </html>`)
+                </body>`)
 
                 return appointment
             }

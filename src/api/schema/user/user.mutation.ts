@@ -26,7 +26,7 @@ export const UserInput = inputObjectType({
         t.string("phone");
         t.nullable.string("designation");
         t.nullable.string("expertise");
-        t.nullable.phone("emergencyPhone");
+        t.nullable.string("emergencyPhone");
     },
 })
 
@@ -38,6 +38,8 @@ export const UserMutation = extendType({
             args: { user: "userInput" },
             resolve: async (_, { user: { email, firstname, lastname, phone, password, designation, emergencyPhone, expertise } }): Promise<any> => {
                 const pass = await bcryptjs.hash(password, 12);
+
+
                 return await prisma.user.create({
                     data: {
                         email, password: pass,
@@ -62,6 +64,22 @@ export const UserMutation = extendType({
             type: "user",
             args: { user: "userInput", file: "Upload" },
             resolve: async (_, { user: { email, firstname, lastname, phone, designation, emergencyPhone, expertise }, file }): Promise<any> => {
+
+
+                if (!firstname) throw new GraphQLError("Firstname is required");
+                if (!lastname) throw new GraphQLError("Lastname is required");
+                if (!expertise) throw new GraphQLError("Expertise is required");
+                if (!designation) throw new GraphQLError("Designation is required")
+                if (!phone) throw new GraphQLError("Phone is required")
+                if (!emergencyPhone) throw new GraphQLError("Emergency Phone is required")
+
+
+                if (!email) throw new GraphQLError("Email is required", {
+                    extensions: {
+                        code: "EMAIL_NOT_FOUND",
+
+                    }
+                })
 
                 const pass = await bcryptjs.hash("0000", 12);
                 if (file) {
@@ -127,9 +145,9 @@ export const UserMutation = extendType({
             resolve: async (_, { user: { email, firstname, lastname, phone, password, } }): Promise<any> => {
                 const pass = await bcryptjs.hash(password, 12);
 
-                const pattern = /^[a-zA-Z0-9._]+@gmail\.com$/;
-
-                if (!pattern.test(email)) throw new GraphQLError("Please enter your GMAIL Address")
+                if (!firstname) throw new GraphQLError("Firstname is required")
+                if (!lastname) throw new GraphQLError("Lastname is required")
+                if (!password) throw new GraphQLError("Password is required")
 
                 if (PhoneCheck(phone)) {
 
@@ -212,12 +230,7 @@ export const UserMutation = extendType({
                             }
                         }
                     })
-                } else {
-                    throw new GraphQLError("Phone number is not valid of the form +17895551234 (7-15 digits)")
                 }
-
-
-
 
             }
         })
@@ -225,6 +238,14 @@ export const UserMutation = extendType({
             type: "user",
             args: { userID: nonNull(idArg()), user: "userInput", file: "Upload" },
             resolve: async (_, { userID, user: { firstname, lastname, phone, designation, expertise, emergencyPhone }, file }): Promise<any> => {
+
+
+                if (!firstname) throw new GraphQLError("Firstname is required");
+                if (!lastname) throw new GraphQLError("Lastname is required");
+                if (!expertise) throw new GraphQLError("Expertise is required");
+                if (!emergencyPhone) throw new GraphQLError("Emergency Phone is required")
+                if (!designation) throw new GraphQLError("Designation is required")
+
                 if (file) {
                     const { createReadStream, filename } = await file
                     return await prisma.user.update({
@@ -275,6 +296,13 @@ export const UserMutation = extendType({
             type: "user",
             args: { user: "userInput", diagnosis: nonNull(stringArg()), time: stringArg(), date: nonNull(stringArg()), platform: "platform" },
             resolve: async (_, { user: { email, phone, firstname, lastname }, diagnosis, time, date, platform }): Promise<any> => {
+
+
+
+
+                if (!firstname) throw new GraphQLError("Firstname is required");
+                if (!lastname) throw new GraphQLError("Lastname is required");
+
                 return await prisma.user.create({
                     data: {
                         email,
@@ -306,6 +334,14 @@ export const UserMutation = extendType({
             type: "user",
             args: { userID: nonNull(idArg()), user: "userInput", diagnosis: nonNull(stringArg()) },
             resolve: async (_, { userID, user: { email, phone, firstname, lastname }, diagnosis }): Promise<any> => {
+
+
+                PhoneCheck(phone)
+
+
+
+                if (!firstname) throw new GraphQLError("Firstname is required");
+                if (!lastname) throw new GraphQLError("Lastname is required");
 
 
                 const userDiagnosis = await prisma.diagnosis.findMany({
@@ -350,6 +386,12 @@ export const UserMutation = extendType({
             type: "user",
             args: { userID: nonNull(idArg()), firstname: nonNull(idArg()), lastname: nonNull(stringArg()), phone: nonNull("PhoneNumber") },
             resolve: async (_, { userID, firstname, lastname, phone }): Promise<any> => {
+
+
+
+                if (!firstname) throw new GraphQLError("Firstname is required");
+                if (!lastname) throw new GraphQLError("Lastname is required");
+
                 return await prisma.user.update({
                     where: { userID },
                     data: {
@@ -408,6 +450,9 @@ export const UserMutation = extendType({
             args: { userID: nonNull(idArg()), current: nonNull(stringArg()), newpass: nonNull(stringArg()) },
             resolve: async (_, { userID, current, newpass }): Promise<any> => {
 
+
+                if (!current) throw new GraphQLError("Current password is required")
+                if (!newpass) throw new GraphQLError("New Password is required")
 
                 const users = await prisma.user.findUnique({
                     where: {

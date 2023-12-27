@@ -1,5 +1,6 @@
 import { extendType, idArg, nonNull, stringArg } from "nexus"
 import { prisma } from "../../../util/index.js"
+import { GraphQLError } from "graphql"
 
 
 export const DiagnosisMutation = extendType({
@@ -9,6 +10,8 @@ export const DiagnosisMutation = extendType({
             type: "diagnosis",
             args: { userID: nonNull(idArg()), diagnosis: nonNull(idArg()) },
             resolve: async (_, { diagnosis, userID }): Promise<any> => {
+
+                if (!diagnosis) throw new GraphQLError("Diagnosis is required")
                 return await prisma.diagnosis.create({
                     data: {
                         diagnosis,
@@ -36,6 +39,9 @@ export const DiagnosisMutation = extendType({
             type: "diagnosis",
             args: { diagnosisID: nonNull(idArg()), diagnosis: nonNull(stringArg()) },
             resolve: async (_, { diagnosis, diagnosisID }): Promise<any> => {
+
+                if (!diagnosis) throw new GraphQLError("Diagnosis is required")
+
                 return await prisma.diagnosis.update({
                     data: { diagnosis, updatedAt: new Date(Date.now()) }, where: {
                         diagnosisID

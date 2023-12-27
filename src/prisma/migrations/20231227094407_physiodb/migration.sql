@@ -33,6 +33,7 @@ CREATE TABLE "services" (
     "descriptions" TEXT NOT NULL,
     "image" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
+    "userID" TEXT,
 
     CONSTRAINT "services_pkey" PRIMARY KEY ("servicesID")
 );
@@ -152,12 +153,54 @@ CREATE TABLE "presciption" (
 -- CreateTable
 CREATE TABLE "feedback" (
     "feedbackID" TEXT NOT NULL,
+    "therapistName" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
+    "time" TEXT NOT NULL,
+    "question1" TEXT NOT NULL,
+    "question2" TEXT NOT NULL,
+    "question3" TEXT NOT NULL,
+    "question4" TEXT NOT NULL,
+    "question5" TEXT NOT NULL,
+    "question6" TEXT NOT NULL,
+    "question7" TEXT NOT NULL,
+    "question8" TEXT NOT NULL,
     "feedback" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "creatdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "feedback_pkey" PRIMARY KEY ("feedbackID")
+);
+
+-- CreateTable
+CREATE TABLE "prediag" (
+    "prediagnosticID" TEXT NOT NULL,
+    "age" TEXT NOT NULL,
+    "sex" TEXT NOT NULL,
+    "date" TEXT NOT NULL,
+    "time" TEXT NOT NULL,
+    "question1" TEXT NOT NULL,
+    "question2" TEXT NOT NULL,
+    "question3" TEXT NOT NULL,
+    "question4" TEXT NOT NULL,
+    "question5" TEXT NOT NULL,
+    "question6" TEXT NOT NULL,
+    "question7" TEXT NOT NULL,
+    "question8" TEXT NOT NULL,
+    "question9" TEXT NOT NULL,
+    "question10" TEXT NOT NULL,
+    "question11" TEXT NOT NULL,
+    "question12" TEXT NOT NULL,
+    "question13" TEXT NOT NULL,
+    "question14" TEXT NOT NULL,
+    "question15" TEXT NOT NULL,
+    "question16" TEXT NOT NULL,
+    "question17" TEXT NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userID" TEXT,
+
+    CONSTRAINT "prediag_pkey" PRIMARY KEY ("prediagnosticID")
 );
 
 -- CreateTable
@@ -168,6 +211,12 @@ CREATE TABLE "_otpTouser" (
 
 -- CreateTable
 CREATE TABLE "_appointmentTouser" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "_appointmentToservices" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
 );
@@ -221,6 +270,12 @@ CREATE UNIQUE INDEX "_appointmentTouser_AB_unique" ON "_appointmentTouser"("A", 
 CREATE INDEX "_appointmentTouser_B_index" ON "_appointmentTouser"("B");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_appointmentToservices_AB_unique" ON "_appointmentToservices"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_appointmentToservices_B_index" ON "_appointmentToservices"("B");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_equipmentTouser_AB_unique" ON "_equipmentTouser"("A", "B");
 
 -- CreateIndex
@@ -245,6 +300,9 @@ CREATE UNIQUE INDEX "_feedbackTouser_AB_unique" ON "_feedbackTouser"("A", "B");
 CREATE INDEX "_feedbackTouser_B_index" ON "_feedbackTouser"("B");
 
 -- AddForeignKey
+ALTER TABLE "services" ADD CONSTRAINT "services_userID_fkey" FOREIGN KEY ("userID") REFERENCES "user"("userID") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "appointment" ADD CONSTRAINT "appointment_feedbackID_fkey" FOREIGN KEY ("feedbackID") REFERENCES "feedback"("feedbackID") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -260,6 +318,9 @@ ALTER TABLE "diagnosis" ADD CONSTRAINT "diagnosis_userID_fkey" FOREIGN KEY ("use
 ALTER TABLE "presciption" ADD CONSTRAINT "presciption_userID_fkey" FOREIGN KEY ("userID") REFERENCES "user"("userID") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "prediag" ADD CONSTRAINT "prediag_userID_fkey" FOREIGN KEY ("userID") REFERENCES "user"("userID") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "_otpTouser" ADD CONSTRAINT "_otpTouser_A_fkey" FOREIGN KEY ("A") REFERENCES "otp"("otpID") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -270,6 +331,12 @@ ALTER TABLE "_appointmentTouser" ADD CONSTRAINT "_appointmentTouser_A_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "_appointmentTouser" ADD CONSTRAINT "_appointmentTouser_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_appointmentToservices" ADD CONSTRAINT "_appointmentToservices_A_fkey" FOREIGN KEY ("A") REFERENCES "appointment"("appointmentID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_appointmentToservices" ADD CONSTRAINT "_appointmentToservices_B_fkey" FOREIGN KEY ("B") REFERENCES "services"("servicesID") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_equipmentTouser" ADD CONSTRAINT "_equipmentTouser_A_fkey" FOREIGN KEY ("A") REFERENCES "equipment"("equipmentID") ON DELETE CASCADE ON UPDATE CASCADE;

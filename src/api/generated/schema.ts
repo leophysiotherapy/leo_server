@@ -106,13 +106,36 @@ export interface NexusGenInputs {
     answer?: string | null; // String
     faqs?: string | null; // String
   }
+  prediaginput: { // input type
+    age?: string | null; // String
+    date?: string | null; // String
+    question1?: string | null; // String
+    question2?: string | null; // String
+    question3?: string | null; // String
+    question4?: string | null; // String
+    question5?: string | null; // String
+    question6?: string | null; // String
+    question7?: string | null; // String
+    question8?: string | null; // String
+    question9?: string | null; // String
+    question10?: string | null; // String
+    question11?: string | null; // String
+    question12?: string | null; // String
+    question13?: string | null; // String
+    question14?: string | null; // String
+    question15?: string | null; // String
+    question16?: string | null; // String
+    question17?: string | null; // String
+    sex?: string | null; // String
+    time?: string | null; // String
+  }
   prescriptionInput: { // input type
     prescription?: string | null; // String
   }
   userInput: { // input type
     designation?: string | null; // String
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    emergencyPhone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
+    emergencyPhone?: string | null; // String
     expertise?: string | null; // String
     firstname?: string | null; // String
     lastname?: string | null; // String
@@ -125,6 +148,7 @@ export interface NexusGenEnums {
   inventory: "equipment" | "supplies"
   platform: "f2f" | "online"
   roles: "admin" | "patient" | "staff"
+  sort: "asc" | "desc"
   status: "canceled" | "done" | "finished" | "upcoming"
 }
 
@@ -209,9 +233,46 @@ export interface NexusGenObjects {
   feedback: { // root type
     creatdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    date?: string | null; // String
     feedback?: string | null; // String
     feedbackID?: string | null; // ID
+    question1?: string | null; // String
+    question2?: string | null; // String
+    question3?: string | null; // String
+    question4?: string | null; // String
+    question5?: string | null; // String
+    question6?: string | null; // String
+    question7?: string | null; // String
+    question8?: string | null; // String
     rating?: number | null; // Int
+    therapistName?: string | null; // String
+    time?: string | null; // String
+  }
+  prediagform: { // root type
+    age?: string | null; // String
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    date?: string | null; // String
+    prediagnosticID?: string | null; // ID
+    question1?: string | null; // String
+    question2?: string | null; // String
+    question3?: string | null; // String
+    question4?: string | null; // String
+    question5?: string | null; // String
+    question6?: string | null; // String
+    question7?: string | null; // String
+    question8?: string | null; // String
+    question9?: string | null; // String
+    question10?: string | null; // String
+    question11?: string | null; // String
+    question12?: string | null; // String
+    question13?: string | null; // String
+    question14?: string | null; // String
+    question15?: string | null; // String
+    question16?: string | null; // String
+    question17?: string | null; // String
+    sex?: string | null; // String
+    time?: string | null; // String
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   prescription: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -278,6 +339,7 @@ export interface NexusGenFieldTypes {
     createPatientAccount: NexusGenRootTypes['user'] | null; // user
     createPatientDiagnosis: NexusGenRootTypes['diagnosis'] | null; // diagnosis
     createPatientPrescription: NexusGenRootTypes['prescription'] | null; // prescription
+    createPreDiagForm: NexusGenRootTypes['prediagform'] | null; // prediagform
     createProfileAvatar: NexusGenRootTypes['avatar'] | null; // avatar
     createServices: NexusGenRootTypes['services'] | null; // services
     createStaffAccount: NexusGenRootTypes['user'] | null; // user
@@ -287,6 +349,7 @@ export interface NexusGenFieldTypes {
     deleteFAQs: NexusGenRootTypes['faqs'] | null; // faqs
     deleteMyFeedback: NexusGenRootTypes['feedback'] | null; // feedback
     deletePatientDiagnosis: NexusGenRootTypes['diagnosis'] | null; // diagnosis
+    deletePreDiagForm: NexusGenRootTypes['prediagform'] | null; // prediagform
     deletePrescrpition: NexusGenRootTypes['prescription'] | null; // prescription
     deleteServices: NexusGenRootTypes['services'] | null; // services
     deleteUserAcc: NexusGenRootTypes['user'] | null; // user
@@ -330,6 +393,7 @@ export interface NexusGenFieldTypes {
     getAllPhysioId: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPhysioPatient: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getAllPhysioUserBySearch: Array<NexusGenRootTypes['user'] | null> | null; // [user]
+    getAllPreDiagnosticForm: Array<NexusGenRootTypes['prediagform'] | null> | null; // [prediagform]
     getAllPrescription: Array<NexusGenRootTypes['prescription'] | null> | null; // [prescription]
     getAllServices: Array<NexusGenRootTypes['services'] | null> | null; // [services]
     getAllUser: Array<NexusGenRootTypes['user'] | null> | null; // [user]
@@ -345,14 +409,18 @@ export interface NexusGenFieldTypes {
     getInventoryBySearch: Array<NexusGenRootTypes['equipment'] | null> | null; // [equipment]
     getInventoryExpiration: number | null; // Int
     getPhysioUserByRole: Array<NexusGenRootTypes['user'] | null> | null; // [user]
+    getPreDiagnositicFormId: Array<NexusGenRootTypes['prediagform'] | null> | null; // [prediagform]
     getPrescriptionsById: Array<NexusGenRootTypes['prescription'] | null> | null; // [prescription]
     getReportsByPlatform: Array<NexusGenRootTypes['appointmentChart'] | null> | null; // [appointmentChart]
+    getSearchFeedback: Array<NexusGenRootTypes['feedback'] | null> | null; // [feedback]
+    getSearchPreDiagnosticForm: Array<NexusGenRootTypes['prediagform'] | null> | null; // [prediagform]
     getSearchuserByRole: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getServicesBySearch: Array<NexusGenRootTypes['services'] | null> | null; // [services]
   }
   Subscription: { // field return type
     FAQsSubscriptions: NexusGenRootTypes['faqs'] | null; // faqs
     InventorySubscriptions: NexusGenRootTypes['equipment'] | null; // equipment
+    PreDiagnosticSubscriptions: NexusGenRootTypes['prediagform'] | null; // prediagform
     UserSubscriptions: NexusGenRootTypes['user'] | null; // user
   }
   appointment: { // field return type
@@ -411,10 +479,48 @@ export interface NexusGenFieldTypes {
     appointment: Array<NexusGenRootTypes['appointment'] | null> | null; // [appointment]
     creatdAt: NexusGenScalars['DateTime'] | null; // DateTime
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    date: string | null; // String
     feedback: string | null; // String
     feedbackID: string | null; // ID
+    question1: string | null; // String
+    question2: string | null; // String
+    question3: string | null; // String
+    question4: string | null; // String
+    question5: string | null; // String
+    question6: string | null; // String
+    question7: string | null; // String
+    question8: string | null; // String
     rating: number | null; // Int
+    therapistName: string | null; // String
+    time: string | null; // String
     users: Array<NexusGenRootTypes['user'] | null> | null; // [user]
+  }
+  prediagform: { // field return type
+    age: string | null; // String
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    date: string | null; // String
+    prediagnosticID: string | null; // ID
+    question1: string | null; // String
+    question2: string | null; // String
+    question3: string | null; // String
+    question4: string | null; // String
+    question5: string | null; // String
+    question6: string | null; // String
+    question7: string | null; // String
+    question8: string | null; // String
+    question9: string | null; // String
+    question10: string | null; // String
+    question11: string | null; // String
+    question12: string | null; // String
+    question13: string | null; // String
+    question14: string | null; // String
+    question15: string | null; // String
+    question16: string | null; // String
+    question17: string | null; // String
+    sex: string | null; // String
+    time: string | null; // String
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    user: Array<NexusGenRootTypes['user'] | null> | null; // [user]
   }
   prescription: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -478,6 +584,7 @@ export interface NexusGenFieldTypeNames {
     createPatientAccount: 'user'
     createPatientDiagnosis: 'diagnosis'
     createPatientPrescription: 'prescription'
+    createPreDiagForm: 'prediagform'
     createProfileAvatar: 'avatar'
     createServices: 'services'
     createStaffAccount: 'user'
@@ -487,6 +594,7 @@ export interface NexusGenFieldTypeNames {
     deleteFAQs: 'faqs'
     deleteMyFeedback: 'feedback'
     deletePatientDiagnosis: 'diagnosis'
+    deletePreDiagForm: 'prediagform'
     deletePrescrpition: 'prescription'
     deleteServices: 'services'
     deleteUserAcc: 'user'
@@ -530,6 +638,7 @@ export interface NexusGenFieldTypeNames {
     getAllPhysioId: 'user'
     getAllPhysioPatient: 'user'
     getAllPhysioUserBySearch: 'user'
+    getAllPreDiagnosticForm: 'prediagform'
     getAllPrescription: 'prescription'
     getAllServices: 'services'
     getAllUser: 'user'
@@ -545,14 +654,18 @@ export interface NexusGenFieldTypeNames {
     getInventoryBySearch: 'equipment'
     getInventoryExpiration: 'Int'
     getPhysioUserByRole: 'user'
+    getPreDiagnositicFormId: 'prediagform'
     getPrescriptionsById: 'prescription'
     getReportsByPlatform: 'appointmentChart'
+    getSearchFeedback: 'feedback'
+    getSearchPreDiagnosticForm: 'prediagform'
     getSearchuserByRole: 'user'
     getServicesBySearch: 'services'
   }
   Subscription: { // field return type name
     FAQsSubscriptions: 'faqs'
     InventorySubscriptions: 'equipment'
+    PreDiagnosticSubscriptions: 'prediagform'
     UserSubscriptions: 'user'
   }
   appointment: { // field return type name
@@ -611,10 +724,48 @@ export interface NexusGenFieldTypeNames {
     appointment: 'appointment'
     creatdAt: 'DateTime'
     createdAt: 'DateTime'
+    date: 'String'
     feedback: 'String'
     feedbackID: 'ID'
+    question1: 'String'
+    question2: 'String'
+    question3: 'String'
+    question4: 'String'
+    question5: 'String'
+    question6: 'String'
+    question7: 'String'
+    question8: 'String'
     rating: 'Int'
+    therapistName: 'String'
+    time: 'String'
     users: 'user'
+  }
+  prediagform: { // field return type name
+    age: 'String'
+    createdAt: 'DateTime'
+    date: 'String'
+    prediagnosticID: 'ID'
+    question1: 'String'
+    question2: 'String'
+    question3: 'String'
+    question4: 'String'
+    question5: 'String'
+    question6: 'String'
+    question7: 'String'
+    question8: 'String'
+    question9: 'String'
+    question10: 'String'
+    question11: 'String'
+    question12: 'String'
+    question13: 'String'
+    question14: 'String'
+    question15: 'String'
+    question16: 'String'
+    question17: 'String'
+    sex: 'String'
+    time: 'String'
+    updatedAt: 'DateTime'
+    user: 'user'
   }
   prescription: { // field return type name
     createdAt: 'DateTime'
@@ -691,14 +842,36 @@ export interface NexusGenArgTypes {
       userID: string; // ID!
     }
     createFeedback: { // args
+      date: string; // String!
       feedback: string; // String!
+      question1: string; // String!
+      question2: string; // String!
+      question3: string; // String!
+      question4: string; // String!
+      question5: string; // String!
+      question6: string; // String!
+      question7: string; // String!
+      question8: string; // String!
       rating: number; // Int!
+      therapistName: string; // String!
+      time: string; // String!
       userID: string; // ID!
     }
     createMyFeedback: { // args
       appointmentID: string; // ID!
+      date: string; // String!
       feedback: string; // String!
+      question1: string; // String!
+      question2: string; // String!
+      question3: string; // String!
+      question4: string; // String!
+      question5: string; // String!
+      question6: string; // String!
+      question7: string; // String!
+      question8: string; // String!
       rating: number; // Int!
+      therapistName: string; // String!
+      time: string; // String!
       userID: string; // ID!
     }
     createOTP: { // args
@@ -720,6 +893,10 @@ export interface NexusGenArgTypes {
     }
     createPatientPrescription: { // args
       prescription: NexusGenInputs['prescriptionInput']; // prescriptionInput!
+      userID: string; // ID!
+    }
+    createPreDiagForm: { // args
+      prediag?: NexusGenInputs['prediaginput'] | null; // prediaginput
       userID: string; // ID!
     }
     createProfileAvatar: { // args
@@ -752,6 +929,9 @@ export interface NexusGenArgTypes {
     }
     deletePatientDiagnosis: { // args
       diagnosisID: string; // ID!
+    }
+    deletePreDiagForm: { // args
+      prediagnosticID: string; // ID!
     }
     deletePrescrpition: { // args
       prescriptionID: string; // ID!
@@ -855,6 +1035,7 @@ export interface NexusGenArgTypes {
     }
     getAllEquipment: { // args
       inventories?: NexusGenEnums['inventory'] | null; // inventory
+      orders?: NexusGenEnums['sort'] | null; // sort
     }
     getAllFeedbackByUserId: { // args
       userID: string; // ID!
@@ -904,8 +1085,12 @@ export interface NexusGenArgTypes {
     }
     getPhysioUserByRole: { // args
       limit: number; // Int!
+      orders: NexusGenEnums['sort']; // sort!
       role?: NexusGenEnums['roles'] | null; // roles
       take: number; // Int!
+    }
+    getPreDiagnositicFormId: { // args
+      prediagnosticID: string; // ID!
     }
     getPrescriptionsById: { // args
       prescriptionID: string; // ID!
@@ -913,6 +1098,12 @@ export interface NexusGenArgTypes {
     getReportsByPlatform: { // args
       dateFilter: string; // String!
       platform: NexusGenEnums['platform']; // platform!
+    }
+    getSearchFeedback: { // args
+      search: string; // String!
+    }
+    getSearchPreDiagnosticForm: { // args
+      search: string; // String!
     }
     getSearchuserByRole: { // args
       role?: NexusGenEnums['roles'] | null; // roles

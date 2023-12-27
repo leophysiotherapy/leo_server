@@ -3,7 +3,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import Nexus from 'nexus'
 import { createServer } from "node:http"
-import { join } from 'node:path'
+import { format, join } from 'node:path'
 import { expressMiddleware } from '@apollo/server/express4';
 import { useServer } from 'graphql-ws/lib/use/ws'
 import express from 'express'
@@ -29,6 +29,7 @@ import * as Equipment from './api/schema/equipement/equipement.js'
 import * as Appointment from './api/schema/appointment/appointment.js'
 import * as Diagnosis from './api/schema/diagnosis/diagnosis.js'
 import * as Service from './api/schema/services/service.js'
+import * as PreDiagnosticForm from './api/schema/prediagform/prediagform.js'
 
 (async function StartAppolloServe() {
 
@@ -39,7 +40,7 @@ import * as Service from './api/schema/services/service.js'
 
 
     const schema = makeSchema({
-        types: [ User, Scalar, FAQs, Prescription, Equipment, Appointment, Diagnosis, Service ],
+        types: [ User, Scalar, FAQs, Prescription, Equipment, Appointment, Diagnosis, Service, PreDiagnosticForm ],
         outputs: {
             schema: join(process.cwd(), "/src/api/generated/schema.graphql"),
             typegen: join(process.cwd(), "/src/api/generated/schema.ts")
@@ -72,7 +73,8 @@ import * as Service from './api/schema/services/service.js'
                     },
                 }
             }
-        } ]
+        } ],
+
     })
 
     await server.start()

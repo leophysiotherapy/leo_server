@@ -34,13 +34,14 @@ type Mutation {
   createBlogPost(blog: blogInput, userID: ID!): blog
   createEquipment(equipment: equipmentInput, inventory: inventory, userID: ID!): equipment
   createFAQs(faqs: faqsInput!, userID: ID!): faqs
-  createFeedback(feedback: String!, rating: Int!, userID: ID!): feedback
-  createMyFeedback(appointmentID: ID!, feedback: String!, rating: Int!, userID: ID!): feedback
+  createFeedback(date: String!, feedback: String!, question1: String!, question2: String!, question3: String!, question4: String!, question5: String!, question6: String!, question7: String!, question8: String!, rating: Int!, therapistName: String!, time: String!, userID: ID!): feedback
+  createMyFeedback(appointmentID: ID!, date: String!, feedback: String!, question1: String!, question2: String!, question3: String!, question4: String!, question5: String!, question6: String!, question7: String!, question8: String!, rating: Int!, therapistName: String!, time: String!, userID: ID!): feedback
   createOTP(email: EmailAddress!): OTP
   createOldPatient(date: String!, diagnosis: String!, platform: platform, time: String, user: userInput): user
   createPatientAccount(user: userInput): user
   createPatientDiagnosis(diagnosis: ID!, userID: ID!): diagnosis
   createPatientPrescription(prescription: prescriptionInput!, userID: ID!): prescription
+  createPreDiagForm(prediag: prediaginput, userID: ID!): prediagform
   createProfileAvatar(avatar: String!, profileID: ID!): avatar
   createServices(descriptions: String!, file: Upload, services: String!): services
   createStaffAccount(file: Upload, user: userInput): user
@@ -50,6 +51,7 @@ type Mutation {
   deleteFAQs(faqsID: ID!): faqs
   deleteMyFeedback(feedbackID: ID!): feedback
   deletePatientDiagnosis(diagnosisID: ID!): diagnosis
+  deletePreDiagForm(prediagnosticID: ID!): prediagform
   deletePrescrpition(prescriptionID: ID!): prescription
   deleteServices(servicesID: ID!): services
   deleteUserAcc(userID: ID!): user
@@ -92,7 +94,7 @@ type Query {
   getAllAppointmentToday: [appointment]
   getAllBlogsPost: [blog]
   getAllDiagnosis: [diagnosis]
-  getAllEquipment(inventories: inventory): [equipment]
+  getAllEquipment(inventories: inventory, orders: sort): [equipment]
   getAllFAQs: [faqs]
   getAllFeedback: [feedback]
   getAllFeedbackByUserId(userID: ID!): [feedback]
@@ -100,6 +102,7 @@ type Query {
   getAllPhysioId(userID: ID!): [user]
   getAllPhysioPatient: [user]
   getAllPhysioUserBySearch(role: roles, search: String!): [user]
+  getAllPreDiagnosticForm: [prediagform]
   getAllPrescription: [prescription]
   getAllServices: [services]
   getAllUser: [user]
@@ -114,9 +117,12 @@ type Query {
   getFindPrescription(search: String!): [prescription]
   getInventoryBySearch(search: String!): [equipment]
   getInventoryExpiration: Int
-  getPhysioUserByRole(limit: Int!, role: roles, take: Int!): [user]
+  getPhysioUserByRole(limit: Int!, orders: sort!, role: roles, take: Int!): [user]
+  getPreDiagnositicFormId(prediagnosticID: ID!): [prediagform]
   getPrescriptionsById(prescriptionID: ID!): [prescription]
   getReportsByPlatform(dateFilter: String!, platform: platform!): [appointmentChart]
+  getSearchFeedback(search: String!): [feedback]
+  getSearchPreDiagnosticForm(search: String!): [prediagform]
   getSearchuserByRole(role: roles, search: String!): [user]
   getServicesBySearch(search: String!): [services]
 }
@@ -124,6 +130,7 @@ type Query {
 type Subscription {
   FAQsSubscriptions: faqs
   InventorySubscriptions(inventory: inventory): equipment
+  PreDiagnosticSubscriptions: prediagform
   UserSubscriptions(role: roles): user
 }
 
@@ -229,9 +236,20 @@ type feedback {
   appointment: [appointment]
   creatdAt: DateTime
   createdAt: DateTime
+  date: String
   feedback: String
   feedbackID: ID
+  question1: String
+  question2: String
+  question3: String
+  question4: String
+  question5: String
+  question6: String
+  question7: String
+  question8: String
   rating: Int
+  therapistName: String
+  time: String
   users: [user]
 }
 
@@ -243,6 +261,58 @@ enum inventory {
 enum platform {
   f2f
   online
+}
+
+type prediagform {
+  age: String
+  createdAt: DateTime
+  date: String
+  prediagnosticID: ID
+  question1: String
+  question2: String
+  question3: String
+  question4: String
+  question5: String
+  question6: String
+  question7: String
+  question8: String
+  question9: String
+  question10: String
+  question11: String
+  question12: String
+  question13: String
+  question14: String
+  question15: String
+  question16: String
+  question17: String
+  sex: String
+  time: String
+  updatedAt: DateTime
+  user: [user]
+}
+
+input prediaginput {
+  age: String
+  date: String
+  question1: String
+  question2: String
+  question3: String
+  question4: String
+  question5: String
+  question6: String
+  question7: String
+  question8: String
+  question9: String
+  question10: String
+  question11: String
+  question12: String
+  question13: String
+  question14: String
+  question15: String
+  question16: String
+  question17: String
+  sex: String
+  time: String
 }
 
 type prescription {
@@ -283,6 +353,11 @@ type services {
   servicesID: ID
 }
 
+enum sort {
+  asc
+  desc
+}
+
 enum status {
   canceled
   done
@@ -311,7 +386,7 @@ type user {
 input userInput {
   designation: String
   email: EmailAddress
-  emergencyPhone: PhoneNumber
+  emergencyPhone: String
   expertise: String
   firstname: String
   lastname: String

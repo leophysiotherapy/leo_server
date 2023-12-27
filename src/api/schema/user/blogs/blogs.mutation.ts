@@ -1,6 +1,7 @@
 import { booleanArg, extendType, idArg, inputObjectType, nonNull } from "nexus";
 import { prisma } from "../../../../util/index.js";
 import { ImageUpload } from "../../../../helpers/aws.js";
+import { GraphQLError } from "graphql";
 
 
 export const blogInput = inputObjectType({
@@ -19,6 +20,12 @@ export const BlogMutation = extendType({
             type: "blog",
             args: { blog: "blogInput", userID: nonNull(idArg()) },
             resolve: async (_, { blog: { title, content, file, expertise }, userID }): Promise<any> => {
+
+
+                if (!title) throw new GraphQLError("Title is required")
+                if (!content) throw new GraphQLError("Content is required")
+
+                if (!file) throw new GraphQLError("Please insert an Image.")
 
                 const { createReadStream, filename } = await file;
 
@@ -41,6 +48,9 @@ export const BlogMutation = extendType({
             type: "blog",
             args: { blogsID: nonNull(idArg()), blog: "blogInput" },
             resolve: async (_, { blogsID, blog: { title, content, expertise, file } }): Promise<any> => {
+
+                if (!title) throw new GraphQLError("Title is required")
+                if (!content) throw new GraphQLError("Content is required")
 
 
                 if (!file) {

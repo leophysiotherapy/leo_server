@@ -1,4 +1,4 @@
-import { extendType, idArg, nonNull } from "nexus";
+import { extendType, idArg, nonNull, stringArg } from "nexus";
 import { prisma } from "../../../../util/index.js";
 
 
@@ -11,6 +11,27 @@ export const FeedbackQuery = extendType({
                 return await prisma.feedback.findMany({
                     orderBy: {
                         creatdAt: "desc"
+                    }
+                })
+            }
+        })
+
+        t.list.field("getSearchFeedback", {
+            type: "feedback",
+            args: { search: nonNull(stringArg()) },
+            resolve: async (_, { search }): Promise<any> => {
+                return await prisma.feedback.findMany({
+                    where: {
+                        user: {
+                            some: {
+                                profile: {
+                                    firstname: {
+                                        contains: search,
+                                        mode: "insensitive"
+                                    }
+                                }
+                            }
+                        }
                     }
                 })
             }
