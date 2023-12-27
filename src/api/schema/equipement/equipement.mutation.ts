@@ -66,7 +66,6 @@ export const EquipmentMutation = extendType({
                         code: 'BAD_USER_INPUT',
                     }
                 })
-                if (!expireDate) throw new GraphQLError("Date is required")
 
                 return await prisma.equipment.update({
                     data: {
