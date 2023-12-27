@@ -83,9 +83,6 @@ type OTP {
   otpID: ID
 }
 
-"""
-A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234.
-"""
 scalar PhoneNumber
 
 type Query {
@@ -310,7 +307,6 @@ input prediaginput {
   question14: String
   question15: String
   question16: String
-  question17: String
   sex: String
   time: String
 }
@@ -386,10 +382,10 @@ type user {
 input userInput {
   designation: String
   email: EmailAddress
-  emergencyPhone: String
+  emergencyPhone: PhoneNumber
   expertise: String
   firstname: String
   lastname: String
   password: String
-  phone: String
+  phone: PhoneNumber
 }

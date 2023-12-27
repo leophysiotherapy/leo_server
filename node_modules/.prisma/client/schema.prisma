@@ -211,7 +211,6 @@ model prediag {
   question14      String
   question15      String
   question16      String
-  question17      String
   createdAt       DateTime @default(now()) @db.Timestamp()
   updatedAt       DateTime @default(now()) @db.Timestamp()
   user            user?    @relation(fields: [userID], references: [userID])

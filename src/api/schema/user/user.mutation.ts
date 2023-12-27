@@ -6,6 +6,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { SendEmail } from "../../../helpers/sendgrid.js";
 import { ImageUpload } from "../../../helpers/aws.js";
 import PhoneCheck from "../../../helpers/phoneChecker.js";
+import { GraphQLPhoneNumberDefault } from "../../../helpers/errorPhone.js";
 
 
 const { sign } = jsonwebtoken
@@ -70,16 +71,13 @@ export const UserMutation = extendType({
                 if (!lastname) throw new GraphQLError("Lastname is required");
                 if (!expertise) throw new GraphQLError("Expertise is required");
                 if (!designation) throw new GraphQLError("Designation is required")
-                if (!phone) throw new GraphQLError("Phone is required")
-                if (!emergencyPhone) throw new GraphQLError("Emergency Phone is required")
 
 
-                if (!email) throw new GraphQLError("Email is required", {
-                    extensions: {
-                        code: "EMAIL_NOT_FOUND",
-
-                    }
+                const emailUser = await prisma.user.findUnique({
+                    where: { email }
                 })
+
+                if (emailUser) throw new GraphQLError("Email is already exist")
 
                 const pass = await bcryptjs.hash("0000", 12);
                 if (file) {
@@ -302,6 +300,16 @@ export const UserMutation = extendType({
 
                 if (!firstname) throw new GraphQLError("Firstname is required");
                 if (!lastname) throw new GraphQLError("Lastname is required");
+
+
+                const emailUser = await prisma.user.findUnique({
+                    where: {
+                        email
+                    }
+                })
+
+
+                if (emailUser) throw new GraphQLError("Email is already exist")
 
                 return await prisma.user.create({
                     data: {

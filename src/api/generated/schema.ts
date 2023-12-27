@@ -23,9 +23,6 @@ declare global {
      * A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
      */
     email<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "EmailAddress";
-    /**
-     * A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234.
-     */
     phone<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "PhoneNumber";
     /**
      * A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
@@ -59,9 +56,6 @@ declare global {
      * A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
      */
     email<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "EmailAddress";
-    /**
-     * A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234.
-     */
     phone<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "PhoneNumber";
     /**
      * A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
@@ -125,7 +119,6 @@ export interface NexusGenInputs {
     question14?: string | null; // String
     question15?: string | null; // String
     question16?: string | null; // String
-    question17?: string | null; // String
     sex?: string | null; // String
     time?: string | null; // String
   }
@@ -135,12 +128,12 @@ export interface NexusGenInputs {
   userInput: { // input type
     designation?: string | null; // String
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    emergencyPhone?: string | null; // String
+    emergencyPhone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
     expertise?: string | null; // String
     firstname?: string | null; // String
     lastname?: string | null; // String
     password?: string | null; // String
-    phone?: string | null; // String
+    phone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
   }
 }
 
