@@ -1027,7 +1027,6 @@ export interface NexusGenArgTypes {
       appointmentID: string; // ID!
     }
     getAllEquipment: { // args
-      expiry?: NexusGenEnums['sort'] | null; // sort
       inventories?: NexusGenEnums['inventory'] | null; // inventory
       orders?: NexusGenEnums['sort'] | null; // sort
     }

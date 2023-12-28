@@ -6,27 +6,17 @@ export const EquipmentQuery = extendType({
     definition(t) {
         t.list.field("getAllEquipment", {
             type: "equipment",
-            args: { inventories: "inventory", orders: "sort", expiry: "sort" },
-            resolve: async (_, { inventories, orders, expiry }): Promise<any> => {
-                if (orders) {
-                    return await prisma.equipment.findMany({
-                        where: {
-                            inventory: inventories
-                        },
-                        orderBy: {
-                            name: orders,
-                        }
-                    })
-                } else {
-                    return await prisma.equipment.findMany({
-                        where: {
-                            inventory: inventories
-                        },
-                        orderBy: {
-                           expireDate: expiry
-                        }
-                    })
-                }
+            args: { inventories: "inventory", orders: "sort" },
+            resolve: async (_, { inventories, orders, }): Promise<any> => {
+                return await prisma.equipment.findMany({
+                    where: {
+                        inventory: inventories
+                    },
+                    orderBy: {
+                        name: orders,
+
+                    }
+                })
             }
         })
         t.int("getInventoryExpiration", {
