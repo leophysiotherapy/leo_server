@@ -66,7 +66,7 @@ import * as PreDiagnosticForm from './api/schema/prediagform/prediagform.js'
         introspection: true,
         formatError: (formattedError, error) => {
             if (formattedError.message.includes("phone") || formattedError.message.includes("emergencyPhone")) {
-                return { message: "Validation phone number “Please enter a valid phone number: (country code) + (area code)(local number)(+1xxxxxxxxxx)" }
+                return { message: "Please enter a valid phone number: (country code) + (area code)(local number) ex.(+1xxxxxxxxxx)" }
             }
 
             if (formattedError.message.includes("email")) {
