@@ -91,7 +91,7 @@ type Query {
   getAllAppointmentToday: [appointment]
   getAllBlogsPost: [blog]
   getAllDiagnosis: [diagnosis]
-  getAllEquipment(inventories: inventory, orders: sort): [equipment]
+  getAllEquipment(expiry: sort, inventories: inventory, orders: sort): [equipment]
   getAllFAQs: [faqs]
   getAllFeedback: [feedback]
   getAllFeedbackByUserId(userID: ID!): [feedback]
